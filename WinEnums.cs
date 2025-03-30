@@ -99,12 +99,29 @@ namespace DoubleKeyPressDetector
         }
 
         // See: https://learn.microsoft.com/en-us/windows/win32/api/winuser/ns-winuser-rawinput
-        [StructLayout(LayoutKind.Sequential)]
+        // RAWINPUT struct needs layout based on type
+        [StructLayout(LayoutKind.Explicit)]
         public struct RAWINPUT
         {
+            [FieldOffset(0)]
             public RAWINPUTHEADER header;
+
+            // --- Corrected Offsets for 64-bit ---
+            [FieldOffset(24)]
+            public RAWMOUSE mouse;
+
+            [FieldOffset(24)]
             public RAWKEYBOARD keyboard;
+
+            [FieldOffset(24)]
+            public RAWHID hid;
         }
+
+        // Dummy structs for RAWMOUSE and RAWHID if not fully defined elsewhere
+        [StructLayout(LayoutKind.Sequential)]
+        public struct RAWMOUSE { /* Define fields if needed */ public ushort usFlags; /* ... */ }
+        [StructLayout(LayoutKind.Sequential)]
+        public struct RAWHID { /* Define fields if needed */ public uint dwSizeHid; /* ... */ }
 
         // For SetWindowLongPtr: https://learn.microsoft.com/en-us/windows/win32/api/winuser/nf-winuser-setwindowlongptra#parameters
         public enum nIndex : int

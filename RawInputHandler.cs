@@ -212,8 +212,8 @@ namespace DoubleKeyPressDetector
                         RAWINPUT raw = Marshal.PtrToStructure<RAWINPUT>(buffer);
 
                         // Check if it's keyboard input and a key-down event (RI_KEY_MAKE)
-                        if (raw.header.dwType == (uint)WinEnums.RAWINPUTHEADER._dwType.RIM_TYPEKEYBOARD &&
-                            (raw.keyboard.Flags & (ushort)RAWKEYBOARD._Flags.RI_KEY_BREAK) == 0) // Check it's NOT KeyUp
+                        if (raw.header.dwType == RAWINPUTHEADER._dwType.RIM_TYPEKEYBOARD &&
+                            (raw.keyboard.Flags & RAWKEYBOARD._Flags.RI_KEY_BREAK) == 0) // Check it's NOT KeyUp
                         {
                             int currentVkCode = raw.keyboard.VKey;
                             long currentTimestamp = _stopwatch.ElapsedMilliseconds;
@@ -301,8 +301,8 @@ namespace DoubleKeyPressDetector
             int msgCode = (int)kb.Message; // Message might be 0 if RIDEV_NOLEGACY is used
             string msgName = msgCode == 0 ? "N/A (NOLEGACY)" : (Enum.GetName(typeof(WinEnums.WM_MESSAGE), msgCode) ?? $"0x{msgCode:X}");
 
-            bool isE0 = (kb.Flags & (ushort)RAWKEYBOARD._Flags.RI_KEY_E0) != 0;
-            bool isE1 = (kb.Flags & (ushort)RAWKEYBOARD._Flags.RI_KEY_E1) != 0;
+            bool isE0 = (kb.Flags & RAWKEYBOARD._Flags.RI_KEY_E0) != 0;
+            bool isE1 = (kb.Flags & RAWKEYBOARD._Flags.RI_KEY_E1) != 0;
             string prefix = isE0 ? "E0" : isE1 ? "E1" : "00";
 
             string makeCodeHex = prefix + kb.MakeCode.ToString("X2");
@@ -323,74 +323,6 @@ namespace DoubleKeyPressDetector
                              $"\n{t}Message:   {msgName}\n" // Message might not be relevant with RIDEV_NOLEGACY
                              );
         }
-
-
-        // --- Structs and Enums (Consider moving to WinEnums.cs) ---
-        // Keep these aligned with your WinEnums.cs file
-        [StructLayout(LayoutKind.Sequential)]
-        public struct RAWINPUTDEVICE
-        {
-            public ushort usUsagePage;
-            public ushort usUsage;
-            public WinEnums.RAWINPUTDEVICE._dwFlags dwFlags;
-            public IntPtr hwndTarget;
-        }
-
-        [StructLayout(LayoutKind.Sequential)]
-        public struct RAWINPUTHEADER
-        {
-            public uint dwType; // Use uint directly
-            public uint dwSize;
-            public IntPtr hDevice;
-            public IntPtr wParam; // Corresponds to WM_INPUT wParam (RIM_INPUT or RIM_INPUTSINK)
-        }
-
-        [StructLayout(LayoutKind.Sequential)]
-        public struct RAWKEYBOARD
-        {
-            public ushort MakeCode;
-            public ushort Flags; // Use ushort directly
-            public ushort Reserved;
-            public ushort VKey;
-            public uint Message; // WM_KEYDOWN, WM_KEYUP etc. (0 if RIDEV_NOLEGACY)
-            public uint ExtraInformation;
-
-            [Flags]
-            public enum _Flags : ushort // Keep internal enum consistent if WinEnums isn't used directly here
-            {
-                RI_KEY_MAKE = 0,
-                RI_KEY_BREAK = 1,
-                RI_KEY_E0 = 2,
-                RI_KEY_E1 = 4,
-                RI_KEY_TERMSRV_SET_LED = 8,
-                RI_KEY_TERMSRV_SHADOW = 0x10
-            }
-        }
-
-        // RAWINPUT struct needs layout based on type
-        [StructLayout(LayoutKind.Explicit)]
-        public struct RAWINPUT
-        {
-            [FieldOffset(0)]
-            public RAWINPUTHEADER header;
-
-            // --- Corrected Offsets for 64-bit ---
-            [FieldOffset(24)]
-            public RAWMOUSE mouse;
-
-            [FieldOffset(24)]
-            public RAWKEYBOARD keyboard;
-
-            [FieldOffset(24)]
-            public RAWHID hid;
-        }
-
-        // Dummy structs for RAWMOUSE and RAWHID if not fully defined elsewhere
-        [StructLayout(LayoutKind.Sequential)]
-        public struct RAWMOUSE { /* Define fields if needed */ public ushort usFlags; /* ... */ }
-        [StructLayout(LayoutKind.Sequential)]
-        public struct RAWHID { /* Define fields if needed */ public uint dwSizeHid; /* ... */ }
-
 
         public static string RawDataToString(RAWINPUT raw)
         {
@@ -420,7 +352,7 @@ namespace DoubleKeyPressDetector
                     // Add other mouse fields if defined in your RAWMOUSE struct
                 } : null,
                 // Include HID data if needed
-                Hid = raw.header.dwType == (uint)WinEnums.RAWINPUTHEADER._dwType.RIM_TYPEHID ? new
+                Hid = raw.header.dwType == WinEnums.RAWINPUTHEADER._dwType.RIM_TYPEHID ? new
                 {
                     SizeHid = raw.hid.dwSizeHid
                     // Add other HID fields if defined in your RAWHID struct
