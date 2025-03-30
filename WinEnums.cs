@@ -117,11 +117,18 @@ namespace DoubleKeyPressDetector
             public RAWHID hid;
         }
 
-        // Dummy structs for RAWMOUSE and RAWHID if not fully defined elsewhere
+        // Dummy structs for RAWMOUSE since we don't need the data
         [StructLayout(LayoutKind.Sequential)]
         public struct RAWMOUSE { /* Define fields if needed */ public ushort usFlags; /* ... */ }
+
+        // See: https://learn.microsoft.com/en-us/windows/win32/api/winuser/ns-winuser-rawhid
         [StructLayout(LayoutKind.Sequential)]
-        public struct RAWHID { /* Define fields if needed */ public uint dwSizeHid; /* ... */ }
+        public struct RAWHID
+        {
+            public uint dwSizeHid;
+            public uint dwCount;
+            public byte bRawData;
+        }
 
         // For SetWindowLongPtr: https://learn.microsoft.com/en-us/windows/win32/api/winuser/nf-winuser-setwindowlongptra#parameters
         public enum nIndex : int
