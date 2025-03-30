@@ -70,6 +70,7 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="CustomSystemSounds.cs" />
     <Compile Include="DoubleKeyPressLogger.cs" />
     <Compile Include="MainForm.cs">
       <SubType>Form</SubType>

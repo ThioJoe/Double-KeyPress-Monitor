@@ -211,15 +211,17 @@ namespace DoubleKeyPressDetector
                     {
                         RAWINPUT raw = Marshal.PtrToStructure<RAWINPUT>(buffer);
 
-                        // Check if it's keyboard input and a key-down event (RI_KEY_MAKE)
-                        if (raw.header.dwType == RAWINPUTHEADER._dwType.RIM_TYPEKEYBOARD &&
-                            (raw.keyboard.Flags & RAWKEYBOARD._Flags.RI_KEY_BREAK) == 0) // Check it's NOT KeyUp
+                        // We only care if it's keyboard input and a key-down event (RI_KEY_MAKE)
+                        if (raw.header.dwType == RAWINPUTHEADER._dwType.RIM_TYPEKEYBOARD
+                            && (raw.keyboard.Flags & RAWKEYBOARD._Flags.RI_KEY_BREAK) == 0 // Check it's NOT KeyUp by testing RI_KEY_BREAK flag (not directly comparing the variable)
+                            && raw.header.hDevice != IntPtr.Zero // Ensures it's not a virtual kepress (e.g., from SendInput)
+                           )
                         {
                             int currentVkCode = raw.keyboard.VKey;
                             long currentTimestamp = _stopwatch.ElapsedMilliseconds;
 
                             //DBUEG: Convert raw variable to string after serialization
-                            string rawString = RawDataToString(raw);
+                            //string rawString = RawDataToString(raw);
 
                             // ---- Double Press Check using Dictionary ----
                             if (_lastKeyTimestamps.TryGetValue(currentVkCode, out long lastPressTimestamp))

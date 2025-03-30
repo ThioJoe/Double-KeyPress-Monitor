@@ -33,6 +33,8 @@
             this.numericUpDownThreshold = new System.Windows.Forms.NumericUpDown();
             this.labelThreshold = new System.Windows.Forms.Label();
             this.labelStatus = new System.Windows.Forms.Label();
+            this.checkBoxPlaySound = new System.Windows.Forms.CheckBox();
+            this.buttonPreviewSound = new System.Windows.Forms.Button();
             ((System.ComponentModel.ISupportInitialize)(this.numericUpDownThreshold)).BeginInit();
             this.SuspendLayout();
             // 
@@ -100,11 +102,33 @@
             this.labelStatus.TabIndex = 4;
             this.labelStatus.Text = "Status: Stopped";
             // 
+            // checkBoxPlaySound
+            // 
+            this.checkBoxPlaySound.AutoSize = true;
+            this.checkBoxPlaySound.Location = new System.Drawing.Point(20, 187);
+            this.checkBoxPlaySound.Name = "checkBoxPlaySound";
+            this.checkBoxPlaySound.Size = new System.Drawing.Size(213, 24);
+            this.checkBoxPlaySound.TabIndex = 5;
+            this.checkBoxPlaySound.Text = "Play Sound On Detection";
+            this.checkBoxPlaySound.UseVisualStyleBackColor = true;
+            // 
+            // buttonPreviewSound
+            // 
+            this.buttonPreviewSound.Location = new System.Drawing.Point(239, 180);
+            this.buttonPreviewSound.Name = "buttonPreviewSound";
+            this.buttonPreviewSound.Size = new System.Drawing.Size(95, 36);
+            this.buttonPreviewSound.TabIndex = 6;
+            this.buttonPreviewSound.Text = "Preview";
+            this.buttonPreviewSound.UseVisualStyleBackColor = true;
+            this.buttonPreviewSound.Click += new System.EventHandler(this.buttonPreviewSound_Click);
+            // 
             // MainForm
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(9F, 20F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(360, 188);
+            this.ClientSize = new System.Drawing.Size(360, 246);
+            this.Controls.Add(this.buttonPreviewSound);
+            this.Controls.Add(this.checkBoxPlaySound);
             this.Controls.Add(this.labelStatus);
             this.Controls.Add(this.labelThreshold);
             this.Controls.Add(this.numericUpDownThreshold);
@@ -128,6 +152,9 @@
         private System.Windows.Forms.Label labelStatus;
 
         #endregion
+
+        private System.Windows.Forms.CheckBox checkBoxPlaySound;
+        private System.Windows.Forms.Button buttonPreviewSound;
     }
 }
 

@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Monitor_Double_Keypresses;
+using System;
 using System.Drawing;
 using System.Windows.Forms;
 
@@ -85,7 +86,18 @@ namespace DoubleKeyPressDetector
             base.OnFormClosing(e);
         }
 
+        private void buttonPreviewSound_Click(object sender, EventArgs e)
+        {
+            PlaySound();
+        }
+
+        private void PlaySound()
+        {
+            // Play Windows "Speech Misrecognition" sound
+            CustomSystemSounds.PlaySpeechMisrecognition();
+        }
+
         // Auto-generated InitializeComponent - ensure controls match
-        
+
     }
 }
