@@ -94,7 +94,7 @@ namespace DoubleKeyPressDetector
         private void PlaySound()
         {
             // Play Windows "Speech Misrecognition" sound
-            CustomSystemSounds.PlaySpeechMisrecognition();
+            CustomSystemSounds.PlayCustomSound(textBoxSoundAlias.Text);
         }
 
         // Auto-generated InitializeComponent - ensure controls match

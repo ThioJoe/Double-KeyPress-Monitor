@@ -35,6 +35,8 @@
             this.labelStatus = new System.Windows.Forms.Label();
             this.checkBoxPlaySound = new System.Windows.Forms.CheckBox();
             this.buttonPreviewSound = new System.Windows.Forms.Button();
+            this.textBoxSoundAlias = new System.Windows.Forms.TextBox();
+            this.labelSoundAlias = new System.Windows.Forms.Label();
             ((System.ComponentModel.ISupportInitialize)(this.numericUpDownThreshold)).BeginInit();
             this.SuspendLayout();
             // 
@@ -105,6 +107,8 @@
             // checkBoxPlaySound
             // 
             this.checkBoxPlaySound.AutoSize = true;
+            this.checkBoxPlaySound.Checked = true;
+            this.checkBoxPlaySound.CheckState = System.Windows.Forms.CheckState.Checked;
             this.checkBoxPlaySound.Location = new System.Drawing.Point(20, 187);
             this.checkBoxPlaySound.Name = "checkBoxPlaySound";
             this.checkBoxPlaySound.Size = new System.Drawing.Size(213, 24);
@@ -122,11 +126,29 @@
             this.buttonPreviewSound.UseVisualStyleBackColor = true;
             this.buttonPreviewSound.Click += new System.EventHandler(this.buttonPreviewSound_Click);
             // 
+            // textBoxSoundAlias
+            // 
+            this.textBoxSoundAlias.Location = new System.Drawing.Point(122, 231);
+            this.textBoxSoundAlias.Name = "textBoxSoundAlias";
+            this.textBoxSoundAlias.Size = new System.Drawing.Size(212, 26);
+            this.textBoxSoundAlias.TabIndex = 7;
+            // 
+            // labelSoundAlias
+            // 
+            this.labelSoundAlias.AutoSize = true;
+            this.labelSoundAlias.Location = new System.Drawing.Point(13, 231);
+            this.labelSoundAlias.Name = "labelSoundAlias";
+            this.labelSoundAlias.Size = new System.Drawing.Size(98, 20);
+            this.labelSoundAlias.TabIndex = 8;
+            this.labelSoundAlias.Text = "Sound Alias:";
+            // 
             // MainForm
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(9F, 20F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(360, 246);
+            this.ClientSize = new System.Drawing.Size(360, 279);
+            this.Controls.Add(this.labelSoundAlias);
+            this.Controls.Add(this.textBoxSoundAlias);
             this.Controls.Add(this.buttonPreviewSound);
             this.Controls.Add(this.checkBoxPlaySound);
             this.Controls.Add(this.labelStatus);
@@ -155,6 +177,8 @@
 
         private System.Windows.Forms.CheckBox checkBoxPlaySound;
         private System.Windows.Forms.Button buttonPreviewSound;
+        private System.Windows.Forms.TextBox textBoxSoundAlias;
+        private System.Windows.Forms.Label labelSoundAlias;
     }
 }
 
