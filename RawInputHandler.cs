@@ -4,7 +4,8 @@ using System.Collections.Generic;
 using System.Diagnostics;
 using System.Runtime.InteropServices;
 using System.Windows.Forms;
-using static DoubleKeyPressDetector.WinEnums.RAWKEYBOARD; // Assuming WinEnums is in this namespace
+//using static DoubleKeyPressDetector.WinEnums.RAWKEYBOARD; // Assuming WinEnums is in this namespace
+using System.Text.Json;
 
 #nullable enable
 
@@ -217,6 +218,9 @@ namespace DoubleKeyPressDetector
                             int currentVkCode = raw.keyboard.VKey;
                             long currentTimestamp = _stopwatch.ElapsedMilliseconds;
 
+                            //DBUEG: Convert raw variable to string after serialization
+                            string rawString = RawDataToString(raw);
+
                             // ---- Double Press Check using Dictionary ----
                             if (_lastKeyTimestamps.TryGetValue(currentVkCode, out long lastPressTimestamp))
                             {
@@ -297,13 +301,13 @@ namespace DoubleKeyPressDetector
             int msgCode = (int)kb.Message; // Message might be 0 if RIDEV_NOLEGACY is used
             string msgName = msgCode == 0 ? "N/A (NOLEGACY)" : (Enum.GetName(typeof(WinEnums.WM_MESSAGE), msgCode) ?? $"0x{msgCode:X}");
 
-            bool isE0 = (kb.Flags & (ushort)_Flags.RI_KEY_E0) != 0;
-            bool isE1 = (kb.Flags & (ushort)_Flags.RI_KEY_E1) != 0;
+            bool isE0 = (kb.Flags & (ushort)RAWKEYBOARD._Flags.RI_KEY_E0) != 0;
+            bool isE1 = (kb.Flags & (ushort)RAWKEYBOARD._Flags.RI_KEY_E1) != 0;
             string prefix = isE0 ? "E0" : isE1 ? "E1" : "00";
 
             string makeCodeHex = prefix + kb.MakeCode.ToString("X2");
             string vKeyHex = kb.VKey.ToString("X2");
-            string flags = ((_Flags)kb.Flags).ToString(); // Cast flags back to enum for string representation
+            string flags = ((RAWKEYBOARD._Flags)kb.Flags).ToString(); // Cast flags back to enum for string representation
 
             string keyName = "Unknown";
             try { keyName = ((Keys)kb.VKey).ToString(); } catch { }
@@ -387,6 +391,47 @@ namespace DoubleKeyPressDetector
         [StructLayout(LayoutKind.Sequential)]
         public struct RAWHID { /* Define fields if needed */ public uint dwSizeHid; /* ... */ }
 
+
+        public static string RawDataToString(RAWINPUT raw)
+        {
+            var rawData = new
+            {
+                Header = new
+                {
+                    Type = raw.header.dwType,
+                    Size = raw.header.dwSize,
+                    Device = raw.header.hDevice.ToInt64(),
+                    Param = raw.header.wParam.ToInt64()
+                },
+                // Add the device type-specific data based on the input type
+                Keyboard = new
+                {
+                    MakeCode = raw.keyboard.MakeCode,
+                    Flags = raw.keyboard.Flags,
+                    Reserved = raw.keyboard.Reserved,
+                    VirtualKey = raw.keyboard.VKey,
+                    Message = raw.keyboard.Message,
+                    ExtraInfo = raw.keyboard.ExtraInformation
+                },
+                // Include mouse data if needed, since it can be present in the union
+                Mouse = raw.header.dwType == (uint)WinEnums.RAWINPUTHEADER._dwType.RIM_TYPEMOUSE ? new
+                {
+                    Flags = raw.mouse.usFlags
+                    // Add other mouse fields if defined in your RAWMOUSE struct
+                } : null,
+                // Include HID data if needed
+                Hid = raw.header.dwType == (uint)WinEnums.RAWINPUTHEADER._dwType.RIM_TYPEHID ? new
+                {
+                    SizeHid = raw.hid.dwSizeHid
+                    // Add other HID fields if defined in your RAWHID struct
+                } : null,
+                // Add the raw type enum name for easier reading
+                TypeName = Enum.GetName(typeof(WinEnums.RAWINPUTHEADER._dwType), raw.header.dwType) ?? $"Unknown({raw.header.dwType})"
+            };
+            string rawString = JsonSerializer.Serialize(rawData);
+
+            return rawString;
+        }
 
     } // End class RawInputHandler
 
