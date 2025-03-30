@@ -1,5 +1,6 @@
 ﻿using DoubleKeyPressDetector; // Namespace for Logger and Log Entry
 using System;
+using System.Collections.Generic;
 using System.Diagnostics;
 using System.Runtime.InteropServices;
 using System.Windows.Forms;
@@ -42,7 +43,8 @@ namespace DoubleKeyPressDetector
 
         // Event to signal a double press was detected
         public static event EventHandler<DoublePressEventArgs>? DoublePressDetected;
-        // --- End Double Press Logic ---
+        // Dictionary to store the last press timestamp for each VK code
+        private static readonly Dictionary<int, long> _lastKeyTimestamps = new Dictionary<int, long>();
 
 
         public static bool RawInputWatcherActive
@@ -208,26 +210,30 @@ namespace DoubleKeyPressDetector
                     {
                         RAWINPUT raw = Marshal.PtrToStructure<RAWINPUT>(buffer);
 
-                        // Check if it's keyboard input and a key-down event
+                        // Check if it's keyboard input and a key-down event (RI_KEY_MAKE)
                         if (raw.header.dwType == (uint)WinEnums.RAWINPUTHEADER._dwType.RIM_TYPEKEYBOARD &&
-                            raw.keyboard.Flags == (ushort)_Flags.RI_KEY_MAKE) // Check for RI_KEY_MAKE explicitly
+                            (raw.keyboard.Flags & (ushort)RAWKEYBOARD._Flags.RI_KEY_BREAK) == 0) // Check it's NOT KeyUp
                         {
                             int currentVkCode = raw.keyboard.VKey;
                             long currentTimestamp = _stopwatch.ElapsedMilliseconds;
-                            long delay = currentTimestamp - _lastKeyPressTimestamp;
 
-                            // ---- Double Press Check ----
-                            if (currentVkCode == _lastVkCode && delay <= DoublePressThresholdMs)
+                            // ---- Double Press Check using Dictionary ----
+                            if (_lastKeyTimestamps.TryGetValue(currentVkCode, out long lastPressTimestamp))
                             {
-                                // Double press detected! Raise the event.
-                                DoublePressDetected?.Invoke(null, new DoublePressEventArgs(currentVkCode, delay));
-                                Console.WriteLine($"Double Press: VK={currentVkCode:X2}, Delay={delay}ms"); // Debug output
+                                // Key found in dictionary, check timing
+                                long delay = currentTimestamp - lastPressTimestamp;
+                                if (delay > 0 && delay <= DoublePressThresholdMs) // Ensure delay is positive (handles potential timer wraps or edge cases)
+                                {
+                                    // Double press detected! Raise the event.
+                                    DoublePressDetected?.Invoke(null, new DoublePressEventArgs(currentVkCode, delay));
+                                    // Console.WriteLine($"Double Press: VK={currentVkCode:X2}, Delay={delay}ms"); // Debug output
+                                }
                             }
                             // ---- End Check ----
 
-                            // Update last key info AFTER checking
-                            _lastVkCode = currentVkCode;
-                            _lastKeyPressTimestamp = currentTimestamp;
+                            // Update the dictionary with the current timestamp for this key
+                            // This happens regardless of whether a double press was detected
+                            _lastKeyTimestamps[currentVkCode] = currentTimestamp;
 
                             // Optional: Print details like in your original example
                             // PrintKeyInfo(raw.keyboard);
@@ -239,10 +245,8 @@ namespace DoubleKeyPressDetector
                     Marshal.FreeHGlobal(buffer);
                 }
 
-                // VERY IMPORTANT for INPUTSINK: Let Windows know the message was processed
-                // Call DefRawInputProc for background messages, otherwise CallWindowProc for foreground.
+                // Let Windows know the message was processed
                 return CallOriginalWndProc(hWnd, uMsg, wParam, lParam, isInputSink: (wParam.ToUInt32() == (uint)WinEnums.WM_INPUT_wParam.RIM_INPUTSINK), rawInputHandle: lParam);
-
             }
 
             // For messages other than WM_INPUT, or if not active, pass to the original window procedure.
