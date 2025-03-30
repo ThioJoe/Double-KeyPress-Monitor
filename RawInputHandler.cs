@@ -366,13 +366,14 @@ namespace DoubleKeyPressDetector
             [FieldOffset(0)]
             public RAWINPUTHEADER header;
 
-            [FieldOffset(16)] // Check offset carefully based on RAWINPUTHEADER size (IntPtr is 8 bytes on x64)
+            // --- Corrected Offsets for 64-bit ---
+            [FieldOffset(24)]
             public RAWMOUSE mouse;
 
-            [FieldOffset(16)]
+            [FieldOffset(24)]
             public RAWKEYBOARD keyboard;
 
-            [FieldOffset(16)]
+            [FieldOffset(24)]
             public RAWHID hid;
         }
 
