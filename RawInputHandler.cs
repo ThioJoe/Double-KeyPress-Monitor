@@ -1,11 +1,12 @@
 ﻿using DoubleKeyPressDetector; // Namespace for Logger and Log Entry
+using Monitor_Double_Keypresses;
 using System;
 using System.Collections.Generic;
 using System.Diagnostics;
 using System.Runtime.InteropServices;
-using System.Windows.Forms;
 //using static DoubleKeyPressDetector.WinEnums.RAWKEYBOARD; // Assuming WinEnums is in this namespace
 using System.Text.Json;
+using System.Windows.Forms;
 
 #nullable enable
 
@@ -230,8 +231,30 @@ namespace DoubleKeyPressDetector
                                 long delay = currentTimestamp - lastPressTimestamp;
                                 if (delay > 0 && delay <= DoublePressThresholdMs) // Ensure delay is positive (handles potential timer wraps or edge cases)
                                 {
+                                    // Get info about the device through the hdevice handle in raw.header
+                                    IntPtr hDevice = raw.header.hDevice;
+                                    string deviceHandleStr = hDevice.ToInt64().ToString("X16");
+                                    RawInputDeviceHelper.RID_DEVICE_INFO? info = RawInputDeviceHelper.GetDeviceInfo(hDevice);
+                                    string? deviceName = RawInputDeviceHelper.GetDeviceName(hDevice);
+
+                                    if (deviceName  == null)
+                                    {
+                                        deviceName = "Unknown";
+                                    }
+
+                                    if (info == null)
+                                    {
+                                        info = new RawInputDeviceHelper.RID_DEVICE_INFO();
+                                    }
+
                                     // Double press detected! Raise the event.
-                                    DoublePressDetected?.Invoke(null, new DoublePressEventArgs(currentVkCode, delay));
+                                    DoublePressDetected?.Invoke(null, new DoublePressEventArgs(
+                                        vkCode: currentVkCode, 
+                                        delay: delay, 
+                                        handleStrng: deviceHandleStr,
+                                        devicePath: deviceName
+                                    ));
+
                                     // Console.WriteLine($"Double Press: VK={currentVkCode:X2}, Delay={delay}ms"); // Debug output
                                 }
                             }
@@ -374,11 +397,15 @@ namespace DoubleKeyPressDetector
     {
         public int VirtualKeyCode { get; }
         public long DelayMilliseconds { get; }
+        public string Handle { get; }
+        public string DevicePath { get; }
 
-        public DoublePressEventArgs(int vkCode, long delay)
+        public DoublePressEventArgs(int vkCode, long delay, string handleStrng, string devicePath)
         {
             VirtualKeyCode = vkCode;
             DelayMilliseconds = delay;
+            Handle = handleStrng;
+            DevicePath = devicePath;
         }
     }
 }

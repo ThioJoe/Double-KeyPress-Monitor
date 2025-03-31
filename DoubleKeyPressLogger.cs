@@ -12,7 +12,8 @@ namespace DoubleKeyPressDetector
         public string KeyName { get; set; }
         public int VirtualKeyCode { get; set; }
         public long TimeDelayMilliseconds { get; set; }
-        public DateTime Timestamp { get; set; } // Add timestamp for context
+        public DateTime Timestamp { get; set; }
+        public string DevicePath { get; set; }
     }
 
     public static class DoubleKeyPressLogger
@@ -20,16 +21,17 @@ namespace DoubleKeyPressDetector
         private static readonly string LogFilePath = Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "double_press_log.json");
         private static readonly object _lock = new object(); // For thread safety
 
-        public static void LogEvent(int vkCode, long delayMs)
+        public static void LogEvent(int vkCode, long delayMs, string devicePath)
         {
             string keyName = Enum.GetName(typeof(Keys), vkCode) ?? $"VK_{vkCode:X2}";
 
-            var logEntry = new DoublePressLogEntry
+            DoublePressLogEntry logEntry = new DoublePressLogEntry
             {
                 KeyName = keyName,
                 VirtualKeyCode = vkCode,
                 TimeDelayMilliseconds = delayMs,
-                Timestamp = DateTime.Now
+                Timestamp = DateTime.Now,
+                DevicePath = devicePath
             };
 
             // Use a non-blocking approach for logging if possible,
@@ -41,8 +43,13 @@ namespace DoubleKeyPressDetector
         {
             try
             {
+                JsonSerializerOptions options = new JsonSerializerOptions
+                {
+                    // Don't bother encoding & character
+                    Encoder = System.Text.Encodings.Web.JavaScriptEncoder.UnsafeRelaxedJsonEscaping,
+                };
                 // Serialize the single entry to JSON
-                string jsonEntry = JsonSerializer.Serialize(logEntry);
+                string jsonEntry = JsonSerializer.Serialize(logEntry, options);
 
                 // Use lock for thread-safe file access
                 lock (_lock)

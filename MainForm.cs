@@ -62,7 +62,7 @@ namespace DoubleKeyPressDetector
         private void RawInputHandler_DoublePressDetected(object sender, DoublePressEventArgs e)
         {
             // Call the logger
-            DoubleKeyPressLogger.LogEvent(e.VirtualKeyCode, e.DelayMilliseconds);
+            DoubleKeyPressLogger.LogEvent(e.VirtualKeyCode, e.DelayMilliseconds, e.DevicePath);
 
             // Optional: Update UI or provide feedback (careful with threading)
             // If you need to update UI controls from here, use BeginInvoke:
