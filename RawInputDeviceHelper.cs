@@ -1,6 +1,5 @@
 ﻿using System;
 using System.Runtime.InteropServices;
-using System.Text;
 using System.ComponentModel; // Required for Win32Exception
 using System.Diagnostics; // For Debug.WriteLine
 

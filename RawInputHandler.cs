@@ -1,6 +1,4 @@
-﻿using DoubleKeyPressDetector; // Namespace for Logger and Log Entry
-using Monitor_Double_Keypresses;
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.Diagnostics;
 using System.Runtime.InteropServices;
@@ -237,7 +235,7 @@ namespace DoubleKeyPressDetector
                                     RawInputDeviceHelper.RID_DEVICE_INFO? info = RawInputDeviceHelper.GetDeviceInfo(hDevice);
                                     string? deviceName = RawInputDeviceHelper.GetDeviceName(hDevice);
 
-                                    if (deviceName  == null)
+                                    if (deviceName == null)
                                     {
                                         deviceName = "Unknown";
                                     }
@@ -249,8 +247,8 @@ namespace DoubleKeyPressDetector
 
                                     // Double press detected! Raise the event.
                                     DoublePressDetected?.Invoke(null, new DoublePressEventArgs(
-                                        vkCode: currentVkCode, 
-                                        delay: delay, 
+                                        vkCode: currentVkCode,
+                                        delay: delay,
                                         handleStrng: deviceHandleStr,
                                         devicePath: deviceName
                                     ));
@@ -312,7 +310,8 @@ namespace DoubleKeyPressDetector
             if (WatcherActiveLabelReference != null && WatcherActiveLabelReference.IsHandleCreated)
             {
                 // Ensure UI updates happen on the UI thread
-                WatcherActiveLabelReference.BeginInvoke(new Action(() => {
+                WatcherActiveLabelReference.BeginInvoke(new Action(() =>
+                {
                     WatcherActiveLabelReference.Text = $"RawInput: {status}";
                     WatcherActiveLabelReference.ForeColor = color;
                 }));
@@ -332,7 +331,7 @@ namespace DoubleKeyPressDetector
 
             string makeCodeHex = prefix + kb.MakeCode.ToString("X2");
             string vKeyHex = kb.VKey.ToString("X2");
-            string flags = ((RAWKEYBOARD._Flags)kb.Flags).ToString(); // Cast flags back to enum for string representation
+            string flags = kb.Flags.ToString(); // Cast flags back to enum for string representation
 
             string keyName = "Unknown";
             try { keyName = ((Keys)kb.VKey).ToString(); } catch { }
