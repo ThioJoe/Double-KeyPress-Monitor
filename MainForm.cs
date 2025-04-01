@@ -1,5 +1,6 @@
 ﻿using Monitor_Double_Keypresses;
 using System;
+using System.Collections.Generic;
 using System.Drawing;
 using System.Windows.Forms;
 
@@ -7,16 +8,47 @@ namespace DoubleKeyPressDetector
 {
     public partial class MainForm : Form
     {
-        public MainForm()
+        public Dictionary<string, string> argsInfo = new Dictionary<string, string>
+        {
+            { "-threshold", "Set the delay threshold in milliseconds for detecting double key presses." },
+            { "-minimized", "Start the application minimized in the taskbar." },
+            { "-start-on-launch", "Start monitoring for double key presses immediately on launch."  }
+        };
+
+        public MainForm(string[] args)
         {
             InitializeComponent();
             // Initial UI state
             buttonStop.Enabled = false;
             labelStatus.ForeColor = Color.Red;
             this.Text = "Double Key Press Detector"; // Set form title
+
+            // Optional: Load settings from command line arguments
+            // Supported arguments: -threshold -minimized -start-on-launch
+            if (args.Length > 0)
+            {
+                for (int i = 0; i < args.Length; i++)
+                {
+                    switch (args[i].ToLower())
+                    {
+                        case "-threshold":
+                            if (i + 1 < args.Length && int.TryParse(args[i + 1], out int threshold))
+                            {
+                                numericUpDownThreshold.Value = threshold;
+                            }
+                            break;
+                        case "-minimized":
+                            this.WindowState = FormWindowState.Minimized;
+                            break;
+                        case "-start-on-launch":
+                            StartMonitor();
+                            break;
+                    }
+                }
+            }
         }
 
-        private void buttonStart_Click(object sender, EventArgs e)
+        private void StartMonitor()
         {
             int threshold = (int)numericUpDownThreshold.Value;
 
@@ -43,7 +75,7 @@ namespace DoubleKeyPressDetector
             }
         }
 
-        private void buttonStop_Click(object sender, EventArgs e)
+        private void StopMonitor()
         {
             // Unsubscribe *before* cleanup
             RawInputHandler.DoublePressDetected -= RawInputHandler_DoublePressDetected;
@@ -56,6 +88,16 @@ namespace DoubleKeyPressDetector
             numericUpDownThreshold.Enabled = true;
             labelStatus.Text = "Status: Stopped"; // Update status label
             labelStatus.ForeColor = Color.Red;
+        }
+
+        private void buttonStart_Click(object sender, EventArgs e)
+        {
+            StartMonitor();
+        }
+
+        private void buttonStop_Click(object sender, EventArgs e)
+        {
+            StopMonitor();
         }
 
         // Event handler called by RawInputHandler when a double press occurs
@@ -95,6 +137,17 @@ namespace DoubleKeyPressDetector
         {
             // Play Windows "Speech Misrecognition" sound
             CustomSystemSounds.PlayCustomSound(textBoxSoundAlias.Text);
+        }
+
+        private void buttonInfo_Click(object sender, EventArgs e)
+        {
+            // Display message box with argument information
+            string message = "Command line arguments supported:\n\n";
+            foreach (var kvp in argsInfo)
+            {
+                message += $"{kvp.Key}: {kvp.Value}\n\n";
+            }
+            MessageBox.Show(message, "Command Line Arguments", MessageBoxButtons.OK, MessageBoxIcon.None);
         }
 
         // Auto-generated InitializeComponent - ensure controls match

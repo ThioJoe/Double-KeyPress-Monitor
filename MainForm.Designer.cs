@@ -37,6 +37,7 @@
             this.buttonPreviewSound = new System.Windows.Forms.Button();
             this.textBoxSoundAlias = new System.Windows.Forms.TextBox();
             this.labelSoundAlias = new System.Windows.Forms.Label();
+            this.buttonInfo = new System.Windows.Forms.Button();
             ((System.ComponentModel.ISupportInitialize)(this.numericUpDownThreshold)).BeginInit();
             this.SuspendLayout();
             // 
@@ -142,11 +143,22 @@
             this.labelSoundAlias.TabIndex = 8;
             this.labelSoundAlias.Text = "Sound Alias:";
             // 
+            // buttonInfo
+            // 
+            this.buttonInfo.Location = new System.Drawing.Point(323, 12);
+            this.buttonInfo.Name = "buttonInfo";
+            this.buttonInfo.Size = new System.Drawing.Size(25, 29);
+            this.buttonInfo.TabIndex = 9;
+            this.buttonInfo.Text = "?";
+            this.buttonInfo.UseVisualStyleBackColor = true;
+            this.buttonInfo.Click += new System.EventHandler(this.buttonInfo_Click);
+            // 
             // MainForm
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(9F, 20F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(360, 279);
+            this.Controls.Add(this.buttonInfo);
             this.Controls.Add(this.labelSoundAlias);
             this.Controls.Add(this.textBoxSoundAlias);
             this.Controls.Add(this.buttonPreviewSound);
@@ -179,6 +191,7 @@
         private System.Windows.Forms.Button buttonPreviewSound;
         private System.Windows.Forms.TextBox textBoxSoundAlias;
         private System.Windows.Forms.Label labelSoundAlias;
+        private System.Windows.Forms.Button buttonInfo;
     }
 }
 
