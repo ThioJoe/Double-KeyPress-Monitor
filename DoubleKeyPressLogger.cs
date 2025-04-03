@@ -45,9 +45,10 @@ namespace DoubleKeyPressDetector
             {
                 JsonSerializerOptions options = new JsonSerializerOptions
                 {
-                    // Don't bother encoding & character
-                    Encoder = System.Text.Encodings.Web.JavaScriptEncoder.UnsafeRelaxedJsonEscaping,
+                    //// Don't bother encoding & character
+                    //Encoder = System.Text.Encodings.Web.JavaScriptEncoder.UnsafeRelaxedJsonEscaping,
                 };
+                options.Encoder = System.Text.Encodings.Web.JavaScriptEncoder.UnsafeRelaxedJsonEscaping;
                 // Serialize the single entry to JSON
                 string jsonEntry = JsonSerializer.Serialize(logEntry, options);
 

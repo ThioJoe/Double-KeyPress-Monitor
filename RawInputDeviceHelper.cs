@@ -3,6 +3,8 @@ using System.Runtime.InteropServices;
 using System.ComponentModel; // Required for Win32Exception
 using System.Diagnostics; // For Debug.WriteLine
 
+#nullable enable
+
 public static class RawInputDeviceHelper
 {
     // Constants from winuser.h
@@ -108,25 +110,38 @@ public static class RawInputDeviceHelper
     /// </summary>
     /// <param name="hDevice">Handle to the raw input device.</param>
     /// <returns>The device name string, or null if an error occurs.</returns>
+    // See: https://learn.microsoft.com/en-us/windows/win32/api/winuser/nf-winuser-getrawinputdeviceinfow
     public static string? GetDeviceName(IntPtr hDevice)
     {
-        uint size = 0;
-        uint result = GetRawInputDeviceInfo(hDevice, RIDI_DEVICENAME, IntPtr.Zero, ref size);
+        uint sizeInChars = 0;
+        uint result = GetRawInputDeviceInfo(hDevice, RIDI_DEVICENAME, IntPtr.Zero, ref sizeInChars);
 
-        if (result == unchecked((uint)-1) && size == 0) // Check for error AND size being 0 (size might be updated even on error)
+
+        if (result == unchecked((uint)-1) && sizeInChars == 0) // Check for error AND size being 0 (size might be updated even on error)
         {
             Debug.WriteLine($"Error getting device name size: {new Win32Exception(Marshal.GetLastWin32Error()).Message}");
             return null;
         }
-        if (size == 0) return string.Empty; // No name available?
+        else if (result == unchecked((uint)-1))
+        {
+            Debug.WriteLine($"Buffer size not large enough. Error getting device name size: {new Win32Exception(Marshal.GetLastWin32Error()).Message}");
+            return null;
+        }
+        else if (sizeInChars == 0)
+        {
+            Debug.WriteLine("Device name size is zero, possibly no name available.");
+            return string.Empty; ;
+        }
 
         IntPtr buffer = IntPtr.Zero;
         try
         {
-            buffer = Marshal.AllocHGlobal((int)size);
+            // The 'pcbSize' parameter returns the number of characters needed, NOT the size in bytes. So allocate enough bytes for that.
+            // Not certain if it includes the null terminator, but better to be safe by adding 2 (2 bytes per char for Unicode).
+            buffer = Marshal.AllocHGlobal((int)(sizeInChars * Marshal.SystemDefaultCharSize + 2));
             if (buffer == IntPtr.Zero) throw new OutOfMemoryException("Failed to allocate memory for device name.");
 
-            uint pcbSize = size; // Use a separate variable for the IN/OUT parameter
+            uint pcbSize = sizeInChars; // Use a separate variable for the IN/OUT parameter
             result = GetRawInputDeviceInfo(hDevice, RIDI_DEVICENAME, buffer, ref pcbSize);
 
             if (result == unchecked((uint)-1))
@@ -135,8 +150,8 @@ public static class RawInputDeviceHelper
                 return null;
             }
             // Optional check: if (result != pcbSize) { /* Log warning? */ }
-
-            return Marshal.PtrToStringAuto(buffer); // Use Auto for wide/ansi chars
+            string deviceName = Marshal.PtrToStringAuto(buffer);
+            return deviceName; // Use Auto for wide/ansi chars
         }
         catch (Exception ex)
         {
