@@ -4,16 +4,39 @@ using System.Collections.Generic;
 using System.Drawing;
 using System.Windows.Forms;
 
+#nullable enable
+
 namespace DoubleKeyPressDetector
 {
     public partial class MainForm : Form
     {
-        public Dictionary<string, string> argsInfo = new Dictionary<string, string>
+        public class Argument(string arg, string description)
         {
-            { "-threshold", "Set the delay threshold in milliseconds for detecting double key presses." },
-            { "-minimized", "Start the application minimized in the taskbar." },
-            { "-start-on-launch", "Start monitoring for double key presses immediately on launch."  }
-        };
+            public string Arg { get; private set; } = arg;
+            public string Description { get; private set; } = description;
+        }
+
+        public static class AvailableArgs
+        {
+            // Define static properties for each specific argument
+            public static Argument Threshold { get; } = new Argument("-threshold", "Set the delay threshold in milliseconds for detecting double key presses.");
+
+            public static Argument Minimized { get; } = new Argument("-minimized", "Start the application minimized in the taskbar.");
+
+            public static Argument StartOnLaunch { get; } = new Argument("-start-on-launch", "Start monitoring for double key presses immediately on launch.");
+
+            public static Argument SoundAlias { get; } = new Argument("-sound-alias", "Specify a custom system sound alias or file path to play when a double keypress is detected.");
+
+            public static List<Argument> All { get; } = new List<Argument>
+            {
+                Threshold,
+                Minimized,
+                StartOnLaunch,
+                SoundAlias
+            };
+        }
+
+        // -----------------------------------------------------------------------------
 
         public MainForm(string[] args)
         {
@@ -22,6 +45,7 @@ namespace DoubleKeyPressDetector
             buttonStop.Enabled = false;
             labelStatus.ForeColor = Color.Red;
             this.Text = "Double Key Press Detector"; // Set form title
+            bool startNow = false;
 
             // Optional: Load settings from command line arguments
             // Supported arguments: -threshold -minimized -start-on-launch
@@ -29,22 +53,36 @@ namespace DoubleKeyPressDetector
             {
                 for (int i = 0; i < args.Length; i++)
                 {
-                    switch (args[i].ToLower())
+                    if (string.Equals(args[i], AvailableArgs.Threshold.Arg, StringComparison.OrdinalIgnoreCase))
                     {
-                        case "-threshold":
-                            if (i + 1 < args.Length && int.TryParse(args[i + 1], out int threshold))
-                            {
-                                numericUpDownThreshold.Value = threshold;
-                            }
-                            break;
-                        case "-minimized":
-                            this.WindowState = FormWindowState.Minimized;
-                            break;
-                        case "-start-on-launch":
-                            StartMonitor();
-                            break;
+                        if (i + 1 < args.Length && int.TryParse(args[i + 1], out int threshold))
+                        {
+                            numericUpDownThreshold.Value = threshold;
+                        }
+                    }
+                    else if (string.Equals(args[i], AvailableArgs.Minimized.Arg, StringComparison.OrdinalIgnoreCase))
+                    {
+                        this.WindowState = FormWindowState.Minimized;
+                    }
+                    else if (string.Equals(args[i], AvailableArgs.StartOnLaunch.Arg, StringComparison.OrdinalIgnoreCase))
+                    {
+                        startNow = true;
+                    }
+                    else if (string.Equals(args[i], AvailableArgs.SoundAlias.Arg, StringComparison.OrdinalIgnoreCase))
+                    {
+                        if (i + 1 < args.Length)
+                        {
+                            textBoxSoundAlias.Text = args[i + 1];
+                        }
                     }
                 }
+
+                // After all the arguments are processed, start monitoring if requested
+                if (startNow)
+                {
+                    StartMonitor();
+                }
+
             }
         }
 
@@ -105,14 +143,11 @@ namespace DoubleKeyPressDetector
         {
             // Call the logger
             DoubleKeyPressLogger.LogEvent(e.VirtualKeyCode, e.DelayMilliseconds, e.DevicePath);
-
-            // Optional: Update UI or provide feedback (careful with threading)
-            // If you need to update UI controls from here, use BeginInvoke:
-            // this.BeginInvoke(new Action(() => { /* Update UI elements */ }));
-            // For example:
-            // this.BeginInvoke(new Action(() => {
-            //    listBoxLog.Items.Insert(0, $"Double Press: VK={e.VirtualKeyCode:X2}, Delay={e.DelayMilliseconds}ms");
-            // }));
+            // Play sound if specified
+            if (checkBoxPlaySound.Checked == true)
+            {
+                CustomSystemSounds.PlayCustomSoundFromTextbox(textBoxSoundAlias.Text);
+            }
         }
 
         // Ensure cleanup when the form closes
@@ -136,21 +171,26 @@ namespace DoubleKeyPressDetector
         private void PlaySound()
         {
             // Play Windows "Speech Misrecognition" sound
-            CustomSystemSounds.PlayCustomSound(textBoxSoundAlias.Text);
+            CustomSystemSounds.PlayCustomSoundFromTextbox(textBoxSoundAlias.Text);
         }
 
         private void buttonInfo_Click(object sender, EventArgs e)
         {
             // Display message box with argument information
             string message = "Command line arguments supported:\n\n";
-            foreach (var kvp in argsInfo)
+            foreach (var arg in AvailableArgs.All)
             {
-                message += $"{kvp.Key}: {kvp.Value}\n\n";
+                message += $"{arg.Arg}: {arg.Description}\n\n";
             }
             MessageBox.Show(message, "Command Line Arguments", MessageBoxButtons.OK, MessageBoxIcon.None);
         }
 
-        // Auto-generated InitializeComponent - ensure controls match
+        private void buttonOpenLog_Click(object sender, EventArgs e)
+        {
+            // Open the log file in the default text editor
+             DoubleKeyPressLogger.OpenLogFile();
+
+        }
 
     }
 }

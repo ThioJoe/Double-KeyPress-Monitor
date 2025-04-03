@@ -65,5 +65,24 @@ namespace DoubleKeyPressDetector
                 // Consider more robust error handling for a production app
             }
         }
+
+        public static void OpenLogFile()
+        {
+            try
+            {
+                // Open the log file with the default text editor
+                System.Diagnostics.Process.Start(new System.Diagnostics.ProcessStartInfo
+                {
+                    FileName = LogFilePath,
+                    UseShellExecute = true,
+                    Verb = "open"
+                });
+            }
+            catch (Exception ex)
+            {
+                // Handle any exceptions that occur when trying to open the file
+                MessageBox.Show($"Error opening log file: {ex.Message}", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+            }
+        }
     }
 }

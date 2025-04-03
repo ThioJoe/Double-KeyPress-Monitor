@@ -20,7 +20,7 @@ public static class CustomSystemSounds
     /// <summary>
     /// Plays the system sound currently configured for the "Speech Misrecognition" event.
     /// </summary>
-    public static void PlayCustomSound(string inputSound)
+    public static void PlayCustomSoundFromTextbox(string inputSound)
     {
         // Combine flags for playing a system event alias asynchronously
         // Using SND_ALIAS by itself often implies searching specific registry locations.

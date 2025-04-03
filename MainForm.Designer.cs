@@ -38,6 +38,7 @@
             this.textBoxSoundAlias = new System.Windows.Forms.TextBox();
             this.labelSoundAlias = new System.Windows.Forms.Label();
             this.buttonInfo = new System.Windows.Forms.Button();
+            this.buttonOpenLog = new System.Windows.Forms.Button();
             ((System.ComponentModel.ISupportInitialize)(this.numericUpDownThreshold)).BeginInit();
             this.SuspendLayout();
             // 
@@ -123,7 +124,7 @@
             this.buttonPreviewSound.Name = "buttonPreviewSound";
             this.buttonPreviewSound.Size = new System.Drawing.Size(95, 36);
             this.buttonPreviewSound.TabIndex = 6;
-            this.buttonPreviewSound.Text = "Preview";
+            this.buttonPreviewSound.Text = "🔊 Preview";
             this.buttonPreviewSound.UseVisualStyleBackColor = true;
             this.buttonPreviewSound.Click += new System.EventHandler(this.buttonPreviewSound_Click);
             // 
@@ -153,11 +154,23 @@
             this.buttonInfo.UseVisualStyleBackColor = true;
             this.buttonInfo.Click += new System.EventHandler(this.buttonInfo_Click);
             // 
+            // buttonOpenLog
+            // 
+            this.buttonOpenLog.Location = new System.Drawing.Point(239, 135);
+            this.buttonOpenLog.Name = "buttonOpenLog";
+            this.buttonOpenLog.Size = new System.Drawing.Size(95, 31);
+            this.buttonOpenLog.TabIndex = 10;
+            this.buttonOpenLog.Text = "Open Log";
+            this.buttonOpenLog.UseCompatibleTextRendering = true;
+            this.buttonOpenLog.UseVisualStyleBackColor = true;
+            this.buttonOpenLog.Click += new System.EventHandler(this.buttonOpenLog_Click);
+            // 
             // MainForm
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(9F, 20F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(360, 279);
+            this.Controls.Add(this.buttonOpenLog);
             this.Controls.Add(this.buttonInfo);
             this.Controls.Add(this.labelSoundAlias);
             this.Controls.Add(this.textBoxSoundAlias);
@@ -192,6 +205,7 @@
         private System.Windows.Forms.TextBox textBoxSoundAlias;
         private System.Windows.Forms.Label labelSoundAlias;
         private System.Windows.Forms.Button buttonInfo;
+        private System.Windows.Forms.Button buttonOpenLog;
     }
 }
 
