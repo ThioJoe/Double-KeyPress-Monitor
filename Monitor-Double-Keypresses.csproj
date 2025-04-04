@@ -81,7 +81,7 @@
     </Compile>
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="RawInputDeviceHelper.cs" />
+    <Compile Include="DeviceDetailsHelper.cs" />
     <Compile Include="RawInputHandler.cs" />
     <Compile Include="WinEnums.cs" />
     <EmbeddedResource Include="MainForm.resx">

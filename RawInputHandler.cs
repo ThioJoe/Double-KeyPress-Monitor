@@ -232,8 +232,8 @@ namespace DoubleKeyPressDetector
                                     // Get info about the device through the hdevice handle in raw.header
                                     IntPtr hDevice = raw.header.hDevice;
                                     string deviceHandleStr = hDevice.ToInt64().ToString("X16");
-                                    RawInputDeviceHelper.RID_DEVICE_INFO? info = RawInputDeviceHelper.GetDeviceInfo(hDevice);
-                                    string? deviceName = RawInputDeviceHelper.GetDeviceName(hDevice);
+                                    DeviceDetailsHelper.RID_DEVICE_INFO? info = DeviceDetailsHelper.GetDeviceInfo(hDevice);
+                                    string? deviceName = DeviceDetailsHelper.GetDeviceName(hDevice);
 
                                     if (deviceName == null)
                                     {
@@ -242,7 +242,7 @@ namespace DoubleKeyPressDetector
 
                                     if (info == null)
                                     {
-                                        info = new RawInputDeviceHelper.RID_DEVICE_INFO();
+                                        info = new DeviceDetailsHelper.RID_DEVICE_INFO();
                                     }
 
                                     // Double press detected! Raise the event.

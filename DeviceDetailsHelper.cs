@@ -5,7 +5,7 @@ using System.Diagnostics; // For Debug.WriteLine
 
 #nullable enable
 
-public static class RawInputDeviceHelper
+public static class DeviceDetailsHelper
 {
     // Constants from winuser.h
     private const int RIDI_DEVICENAME = 0x20000007;
