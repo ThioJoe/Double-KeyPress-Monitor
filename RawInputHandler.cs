@@ -46,6 +46,16 @@ namespace DoubleKeyPressDetector
         // Dictionary to store the last press timestamp for each VK code
         private static readonly Dictionary<int, long> _lastKeyTimestamps = new Dictionary<int, long>();
 
+        // Delegate for the window procedure
+        private delegate IntPtr WndProcDelegate(IntPtr hwnd, WinEnums.WM_MESSAGE msg, UIntPtr wParam, IntPtr lParam);
+        private static WndProcDelegate? wndProcDelegate;
+        private static IntPtr originalWndProc = IntPtr.Zero;
+        private const int GWLP_WNDPROC = -4;
+        private static IntPtr targetWindowHandle = IntPtr.Zero; // Store the target window handle
+
+        public static readonly uint rawInputHeaderSize = (uint)Marshal.SizeOf<RAWINPUTHEADER>();
+        public static readonly uint rawInputSize = (uint)Marshal.SizeOf<RAWINPUT>();
+
 
         public static bool RawInputWatcherActive
         {
@@ -71,16 +81,6 @@ namespace DoubleKeyPressDetector
                 }
             }
         }
-
-
-        private delegate IntPtr WndProcDelegate(IntPtr hwnd, WinEnums.WM_MESSAGE msg, UIntPtr wParam, IntPtr lParam);
-        private static WndProcDelegate? wndProcDelegate;
-        private static IntPtr originalWndProc = IntPtr.Zero;
-        private const int GWLP_WNDPROC = -4;
-        private static IntPtr targetWindowHandle = IntPtr.Zero; // Store the target window handle
-
-        public static readonly uint rawInputHeaderSize = (uint)Marshal.SizeOf<RAWINPUTHEADER>();
-        public static readonly uint rawInputSize = (uint)Marshal.SizeOf<RAWINPUT>();
 
         public static bool InitializeRawInput(IntPtr hwnd, Label? labelToUpdate = null, int thresholdMs = 10)
         {
@@ -210,10 +210,11 @@ namespace DoubleKeyPressDetector
                     {
                         RAWINPUT raw = Marshal.PtrToStructure<RAWINPUT>(buffer);
 
-                        // We only care if it's keyboard input and a key-down event (RI_KEY_MAKE)
+                        // We only care if it's keyboard input and a key-up event (RI_KEY_BREAK)
+                        // Only key-up because otherwise it will could detect repeat-key events if the threshold milliseconds is too high
                         if (raw.header.dwType == RAWINPUTHEADER._dwType.RIM_TYPEKEYBOARD
-                            && (raw.keyboard.Flags & RAWKEYBOARD._Flags.RI_KEY_BREAK) == 0 // Check it's NOT KeyUp by testing RI_KEY_BREAK flag (not directly comparing the variable)
-                            && raw.header.hDevice != IntPtr.Zero // Ensures it's not a virtual kepress (e.g., from SendInput)
+                            && raw.keyboard.Flags.HasFlag(RAWKEYBOARD._Flags.RI_KEY_BREAK)
+                            && raw.header.hDevice != IntPtr.Zero // Ensures it's not a virtual kepress (e.g., from SendInput) which has no hDevice
                            )
                         {
                             int currentVkCode = raw.keyboard.VKey;
@@ -262,8 +263,7 @@ namespace DoubleKeyPressDetector
                             // This happens regardless of whether a double press was detected
                             _lastKeyTimestamps[currentVkCode] = currentTimestamp;
 
-                            // Optional: Print details like in your original example
-                            // PrintKeyInfo(raw.keyboard);
+                             //PrintKeyInfo(raw.keyboard);
                         }
                     }
                 }
@@ -319,7 +319,6 @@ namespace DoubleKeyPressDetector
             Console.WriteLine($"RawInput Status: {status}"); // Console fallback
         }
 
-        // (Optional) Keep the PrintKeyInfo method if you want console output
         private static void PrintKeyInfo(RAWKEYBOARD kb)
         {
             int msgCode = (int)kb.Message; // Message might be 0 if RIDEV_NOLEGACY is used

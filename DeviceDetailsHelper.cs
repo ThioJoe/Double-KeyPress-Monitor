@@ -276,7 +276,6 @@ public static class DeviceDetailsHelper
     }
 
 
-    // --- Example Usage (remains the same) ---
     public static void PrintDeviceInfo(IntPtr hDevice)
     {
         if (hDevice == IntPtr.Zero)
