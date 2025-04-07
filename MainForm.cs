@@ -102,6 +102,7 @@ namespace DoubleKeyPressDetector
                 buttonStart.Enabled = false;
                 buttonStop.Enabled = true;
                 numericUpDownThreshold.Enabled = false; // Disable changing threshold while running
+                textBoxSoundAlias.Enabled = false; // Disable sound alias input while running
                 labelStatus.Text = "Status: Running"; // Update status label directly here too
                 labelStatus.ForeColor = Color.Green;
             }
@@ -124,6 +125,7 @@ namespace DoubleKeyPressDetector
             buttonStart.Enabled = true;
             buttonStop.Enabled = false;
             numericUpDownThreshold.Enabled = true;
+            textBoxSoundAlias.Enabled = true; // Re-enable sound alias input
             labelStatus.Text = "Status: Stopped"; // Update status label
             labelStatus.ForeColor = Color.Red;
         }
