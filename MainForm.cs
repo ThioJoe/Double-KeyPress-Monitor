@@ -206,7 +206,15 @@ namespace DoubleKeyPressDetector
 
         private void buttonSoundHelp_Click(object sender, EventArgs e)
         {
+            string message = "You can enter a Windows sound alias, or sound file to play when a double keypress is detected.\n\n" +
+                "Supported Values:\n" +
+                "- Full absolute path to a sound file\n" +
+                "- Just a File Name: (It will look in C:\\Windows\\Media)\n" +
+                "- Relative path to a sound file (Relative to C:\\Windows\\Media)\n" +
+                "- The \"Alias\" of the sound, a list of which can be found in the registry at: HKEY_CURRENT_USER\\AppEvents\\Schemes\\Apps\\.Default\n\n" +
+                "If you leave this blank, the 'Speech Misrecognition' system sound will be played.";
 
+            MessageBox.Show(message, "Sound Help", MessageBoxButtons.OK, MessageBoxIcon.None);
         }
     }
 }
