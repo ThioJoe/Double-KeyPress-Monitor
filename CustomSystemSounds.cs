@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Runtime.InteropServices;
 using System.Diagnostics;
+using System.IO;
 
 namespace Monitor_Double_Keypresses;
 public static class CustomSystemSounds
@@ -38,32 +39,43 @@ public static class CustomSystemSounds
         // HKEY_CURRENT_USER\AppEvents\EventLabels\MisrecoSound
         const string SOUND_MISRECOGNITION_PATH = "C:\\Windows\\Media\\Speech Misrecognition.wav";
 
-        // Detect slashes in the input sound name and treat it as a filename if found
-        // This allows playing custom sounds by specifying a full path or a relative path.
-        if (inputSound.Contains("\\") || inputSound.Contains("/"))
-        {
-            playSoundFlags |= fdwSound.SND_FILENAME;
-            // Trim quotes if present and trim whitespace
-            inputSound = inputSound.Trim().Trim('"');
-        }
+        // Trim quotes if present and trim whitespace
+        inputSound.Trim().Trim('"');
 
-        // Known to work with aliases at: HKEY_CURRENT_USER\AppEvents\Schemes\Apps\.Default
-        string soundAliasToPlay;
-        if (string.IsNullOrEmpty(inputSound))
+        // First detect if it's a file path that exists
+        if (Path.HasExtension(inputSound) && File.Exists(inputSound))
         {
-            soundAliasToPlay = SOUND_MISRECOGNITION_PATH;
             playSoundFlags |= fdwSound.SND_FILENAME;
         }
+        // If it's a file name but not a full path, we'll assume it's relative to C:\Windows\Media
+        else if (Path.HasExtension(inputSound))
+        {
+            string possibleFilePath = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.Windows), "Media", inputSound);
+            if (File.Exists(possibleFilePath))
+            {
+                playSoundFlags |= fdwSound.SND_FILENAME;
+                inputSound = possibleFilePath; // Update to the full path
+            }
+        }
+        // If nothing is provided, we'll default to the Speech Misrecognition sound
+        else if (string.IsNullOrEmpty(inputSound))
+        {
+            // Known to work with aliases at: HKEY_CURRENT_USER\AppEvents\Schemes\Apps\.Default
+            playSoundFlags |= fdwSound.SND_FILENAME;
+            inputSound = SOUND_MISRECOGNITION_PATH; // Default to the speech misrecognition sound
+        }
+        // Otherwise we'll assume it's an alias name
         else
         {
-            soundAliasToPlay = inputSound;
+            // Do nothing, we assume it's an alias and let PlaySound handle it
         }
+
 
         try
         {
             // Call PlaySound using the alias name and flags.
             // hmod must be IntPtr.Zero when using SND_ALIAS.
-            PlaySound(soundAliasToPlay, IntPtr.Zero, playSoundFlags);
+            PlaySound(inputSound, IntPtr.Zero, playSoundFlags);
 
             // Note: PlaySound returns true on success, false on failure.
             // Failure often means the sound alias wasn't found or configured.

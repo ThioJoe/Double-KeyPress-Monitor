@@ -204,5 +204,9 @@ namespace DoubleKeyPressDetector
 
         }
 
+        private void buttonSoundHelp_Click(object sender, EventArgs e)
+        {
+
+        }
     }
 }

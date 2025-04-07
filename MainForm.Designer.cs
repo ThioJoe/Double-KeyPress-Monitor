@@ -39,6 +39,7 @@
             this.labelSoundAlias = new System.Windows.Forms.Label();
             this.buttonInfo = new System.Windows.Forms.Button();
             this.buttonOpenLog = new System.Windows.Forms.Button();
+            this.buttonSoundHelp = new System.Windows.Forms.Button();
             ((System.ComponentModel.ISupportInitialize)(this.numericUpDownThreshold)).BeginInit();
             this.SuspendLayout();
             // 
@@ -132,7 +133,7 @@
             // 
             this.textBoxSoundAlias.Location = new System.Drawing.Point(122, 231);
             this.textBoxSoundAlias.Name = "textBoxSoundAlias";
-            this.textBoxSoundAlias.Size = new System.Drawing.Size(212, 26);
+            this.textBoxSoundAlias.Size = new System.Drawing.Size(194, 26);
             this.textBoxSoundAlias.TabIndex = 7;
             // 
             // labelSoundAlias
@@ -146,9 +147,9 @@
             // 
             // buttonInfo
             // 
-            this.buttonInfo.Location = new System.Drawing.Point(323, 12);
+            this.buttonInfo.Location = new System.Drawing.Point(321, 12);
             this.buttonInfo.Name = "buttonInfo";
-            this.buttonInfo.Size = new System.Drawing.Size(25, 41);
+            this.buttonInfo.Size = new System.Drawing.Size(27, 36);
             this.buttonInfo.TabIndex = 9;
             this.buttonInfo.Text = "?";
             this.buttonInfo.UseVisualStyleBackColor = true;
@@ -165,11 +166,22 @@
             this.buttonOpenLog.UseVisualStyleBackColor = true;
             this.buttonOpenLog.Click += new System.EventHandler(this.buttonOpenLog_Click);
             // 
+            // buttonSoundHelp
+            // 
+            this.buttonSoundHelp.Location = new System.Drawing.Point(322, 226);
+            this.buttonSoundHelp.Name = "buttonSoundHelp";
+            this.buttonSoundHelp.Size = new System.Drawing.Size(27, 36);
+            this.buttonSoundHelp.TabIndex = 11;
+            this.buttonSoundHelp.Text = "?";
+            this.buttonSoundHelp.UseVisualStyleBackColor = true;
+            this.buttonSoundHelp.Click += new System.EventHandler(this.buttonSoundHelp_Click);
+            // 
             // MainForm
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(9F, 20F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(360, 279);
+            this.Controls.Add(this.buttonSoundHelp);
             this.Controls.Add(this.buttonOpenLog);
             this.Controls.Add(this.buttonInfo);
             this.Controls.Add(this.labelSoundAlias);
@@ -206,6 +218,7 @@
         private System.Windows.Forms.Label labelSoundAlias;
         private System.Windows.Forms.Button buttonInfo;
         private System.Windows.Forms.Button buttonOpenLog;
+        private System.Windows.Forms.Button buttonSoundHelp;
     }
 }
 
