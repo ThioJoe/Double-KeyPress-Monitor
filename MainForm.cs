@@ -178,10 +178,22 @@ namespace DoubleKeyPressDetector
         {
             // Display message box with argument information
             string message = "Command line arguments supported:\n\n";
+            // Loop through and show each argument
             foreach (var arg in AvailableArgs.All)
             {
                 message += $"{arg.Arg}: {arg.Description}\n\n";
             }
+
+            message += "Tip:\n" +
+                "To catch the most erroneous keypresses, you should set the threshold time as high as you can, " +
+                "but still less than the max speed you'd naturally be able to actually press keys.\n" +
+                "\n" +
+                "To test this, set the threshold to something very very high like 500ms, then mash a single key as fast as you can, " +
+                "and look in the log for roughly the shortest delay you managed to produce between any of the keypresses. Then set " +
+                "your threshold just below, or right around that delay. That should safely prevent any false-positives even in the case where you have to mash a button like in a game.\n\n" +
+                "Remember: The duplicate threshold delay applies to each individual key, so if you press 'A' then immediately 'B' it will obviously not count. " +
+                "And it is still able to detect if an erroneous second 'A' keystroke occurs after the 'B' keystroke for example.\n\n";
+
             MessageBox.Show(message, "Command Line Arguments", MessageBoxButtons.OK, MessageBoxIcon.None);
         }
 
