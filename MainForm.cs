@@ -2,7 +2,10 @@
 using System;
 using System.Collections.Generic;
 using System.Drawing;
+using System.Runtime.InteropServices;
 using System.Windows.Forms;
+
+[assembly: DefaultDllImportSearchPaths(DllImportSearchPath.System32)]
 
 #nullable enable
 
@@ -88,6 +91,8 @@ namespace DoubleKeyPressDetector
 
         private void StartMonitor()
         {
+            DoubleKeyPressLogger.CreateLogIfNecessary();
+
             int threshold = (int)numericUpDownThreshold.Value;
 
             // Pass the labelStatus for UI feedback from RawInputHandler
@@ -201,8 +206,9 @@ namespace DoubleKeyPressDetector
 
         private void buttonOpenLog_Click(object sender, EventArgs e)
         {
+            DoubleKeyPressLogger.CreateLogIfNecessary();
             // Open the log file in the default text editor
-             DoubleKeyPressLogger.OpenLogFile();
+            DoubleKeyPressLogger.OpenLogFile();
 
         }
 

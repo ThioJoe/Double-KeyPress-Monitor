@@ -85,5 +85,24 @@ namespace DoubleKeyPressDetector
                 MessageBox.Show($"Error opening log file: {ex.Message}", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
             }
         }
+
+        public static void CreateLogIfNecessary()
+        {
+            // Ensure the log file exists
+            if (!File.Exists(LogFilePath))
+            {
+                try
+                {
+                    // Create the file if it doesn't exist
+                    using (File.Create(LogFilePath)) { }
+                }
+                catch (Exception ex)
+                {
+                    // Handle any exceptions that occur during file creation
+                    MessageBox.Show($"Error creating log file: {ex.Message}", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                }
+            }
+        }
+
     }
 }
