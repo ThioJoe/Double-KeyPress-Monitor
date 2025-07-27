@@ -3,7 +3,6 @@ using System.Collections.Generic;
 using System.Diagnostics;
 using System.Runtime.InteropServices;
 //using static DoubleKeyPressDetector.WinEnums.RAWKEYBOARD; // Assuming WinEnums is in this namespace
-using System.Text.Json;
 using System.Windows.Forms;
 
 #nullable enable
@@ -347,46 +346,46 @@ namespace DoubleKeyPressDetector
                              );
         }
 
-        public static string RawDataToString(RAWINPUT raw)
-        {
-            var rawData = new
-            {
-                Header = new
-                {
-                    Type = raw.header.dwType,
-                    Size = raw.header.dwSize,
-                    Device = raw.header.hDevice.ToInt64(),
-                    Param = raw.header.wParam.ToInt64()
-                },
-                // Add the device type-specific data based on the input type
-                Keyboard = new
-                {
-                    MakeCode = raw.keyboard.MakeCode,
-                    Flags = raw.keyboard.Flags,
-                    Reserved = raw.keyboard.Reserved,
-                    VirtualKey = raw.keyboard.VKey,
-                    Message = raw.keyboard.Message,
-                    ExtraInfo = raw.keyboard.ExtraInformation
-                },
-                // Include mouse data if needed, since it can be present in the union
-                Mouse = raw.header.dwType == (uint)WinEnums.RAWINPUTHEADER._dwType.RIM_TYPEMOUSE ? new
-                {
-                    Flags = raw.mouse.usFlags
-                    // Add other mouse fields if defined in your RAWMOUSE struct
-                } : null,
-                // Include HID data if needed
-                Hid = raw.header.dwType == WinEnums.RAWINPUTHEADER._dwType.RIM_TYPEHID ? new
-                {
-                    SizeHid = raw.hid.dwSizeHid
-                    // Add other HID fields if defined in your RAWHID struct
-                } : null,
-                // Add the raw type enum name for easier reading
-                TypeName = Enum.GetName(typeof(WinEnums.RAWINPUTHEADER._dwType), raw.header.dwType) ?? $"Unknown({raw.header.dwType})"
-            };
-            string rawString = JsonSerializer.Serialize(rawData);
+        //public static string RawDataToString(RAWINPUT raw)
+        //{
+        //    var rawData = new
+        //    {
+        //        Header = new
+        //        {
+        //            Type = raw.header.dwType,
+        //            Size = raw.header.dwSize,
+        //            Device = raw.header.hDevice.ToInt64(),
+        //            Param = raw.header.wParam.ToInt64()
+        //        },
+        //        // Add the device type-specific data based on the input type
+        //        Keyboard = new
+        //        {
+        //            MakeCode = raw.keyboard.MakeCode,
+        //            Flags = raw.keyboard.Flags,
+        //            Reserved = raw.keyboard.Reserved,
+        //            VirtualKey = raw.keyboard.VKey,
+        //            Message = raw.keyboard.Message,
+        //            ExtraInfo = raw.keyboard.ExtraInformation
+        //        },
+        //        // Include mouse data if needed, since it can be present in the union
+        //        Mouse = raw.header.dwType == (uint)WinEnums.RAWINPUTHEADER._dwType.RIM_TYPEMOUSE ? new
+        //        {
+        //            Flags = raw.mouse.usFlags
+        //            // Add other mouse fields if defined in your RAWMOUSE struct
+        //        } : null,
+        //        // Include HID data if needed
+        //        Hid = raw.header.dwType == WinEnums.RAWINPUTHEADER._dwType.RIM_TYPEHID ? new
+        //        {
+        //            SizeHid = raw.hid.dwSizeHid
+        //            // Add other HID fields if defined in your RAWHID struct
+        //        } : null,
+        //        // Add the raw type enum name for easier reading
+        //        TypeName = Enum.GetName(typeof(WinEnums.RAWINPUTHEADER._dwType), raw.header.dwType) ?? $"Unknown({raw.header.dwType})"
+        //    };
+        //    string rawString = JsonSerializer.Serialize(rawData);
 
-            return rawString;
-        }
+        //    return rawString;
+        //}
 
     } // End class RawInputHandler
 

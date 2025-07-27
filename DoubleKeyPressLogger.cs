@@ -1,6 +1,6 @@
 ﻿using System;
 using System.IO;
-using System.Text.Json;
+using System.Text;
 using System.Threading;
 using System.Windows.Forms; // Required for Keys enum
 
@@ -18,7 +18,7 @@ namespace DoubleKeyPressDetector
 
     public static class DoubleKeyPressLogger
     {
-        private static readonly string LogFilePath = Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "double_press_log.json");
+        private static readonly string LogFilePath = Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "double_press_log.log");
         private static readonly object _lock = new object(); // For thread safety
 
         public static void LogEvent(int vkCode, long delayMs, string devicePath)
@@ -43,27 +43,32 @@ namespace DoubleKeyPressDetector
         {
             try
             {
-                JsonSerializerOptions options = new JsonSerializerOptions
+                // Ensure the log file exists
+                if (!File.Exists(LogFilePath))
                 {
-                    //// Don't bother encoding & character
-                    //Encoder = System.Text.Encodings.Web.JavaScriptEncoder.UnsafeRelaxedJsonEscaping,
-                };
-                options.Encoder = System.Text.Encodings.Web.JavaScriptEncoder.UnsafeRelaxedJsonEscaping;
-                // Serialize the single entry to JSON
-                string jsonEntry = JsonSerializer.Serialize(logEntry, options);
+                    CreateLogIfNecessary();
+                }
+
+                string formattedTime = logEntry.Timestamp.ToLocalTime().ToString("yyyy-MM-dd hh:mm:ss.fff tt");
+
+                StringBuilder logLine = new StringBuilder();
+                logLine.Append($"KeyName: {logEntry.KeyName}\t\t");
+                logLine.Append($"TimeDelayMilliseconds: {logEntry.TimeDelayMilliseconds}\t\t");
+                logLine.Append($"VirtualKeyCode: {logEntry.VirtualKeyCode}\t\t");
+                logLine.Append($"Timestamp: {formattedTime}\t\t");
+                logLine.Append($"DevicePath: {logEntry.DevicePath}");
 
                 // Use lock for thread-safe file access
                 lock (_lock)
                 {
-                    // Append the JSON entry as a new line
-                    File.AppendAllText(LogFilePath, jsonEntry + Environment.NewLine);
+                    // Append the entry as a new line
+                    File.AppendAllText(LogFilePath, logLine + Environment.NewLine);
                 }
             }
             catch (Exception ex)
             {
                 // Basic error handling: Log to debug output or console
                 System.Diagnostics.Debug.WriteLine($"Error logging double press: {ex.Message}");
-                // Consider more robust error handling for a production app
             }
         }
 
