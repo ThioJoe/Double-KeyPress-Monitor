@@ -39,6 +39,7 @@ namespace DoubleKeyPressDetector
         private static readonly Stopwatch _stopwatch = new Stopwatch(); // For timing key presses
         private static long _lastKeyPressTimestamp = 0;
         public static int DoublePressThresholdMs { get; set; } = 10; // Default threshold
+        public static List<int> IgnoredVkCodes { get; } = new List<int>(); // List of VK codes to ignore>
 
         // Event to signal a double press was detected
         public static event EventHandler<DoublePressEventArgs>? DoublePressDetected;
@@ -81,9 +82,15 @@ namespace DoubleKeyPressDetector
             }
         }
 
-        public static bool InitializeRawInput(IntPtr hwnd, Label? labelToUpdate = null, int thresholdMs = 10)
+        public static bool InitializeRawInput(IntPtr hwnd, Label? labelToUpdate = null, int thresholdMs = 10, List<int>? ignoredVKs = null)
         {
             if (RawInputWatcherActive) return true; // Already active
+
+            IgnoredVkCodes.Clear();
+            if (ignoredVKs != null)
+            {
+                IgnoredVkCodes.AddRange(ignoredVKs);
+            }
 
             WatcherActiveLabelReference = labelToUpdate;
             targetWindowHandle = hwnd; // Store handle
@@ -214,6 +221,7 @@ namespace DoubleKeyPressDetector
                         if (raw.header.dwType == RAWINPUTHEADER._dwType.RIM_TYPEKEYBOARD
                             && raw.keyboard.Flags.HasFlag(RAWKEYBOARD._Flags.RI_KEY_BREAK)
                             && raw.header.hDevice != IntPtr.Zero // Ensures it's not a virtual kepress (e.g., from SendInput) which has no hDevice
+                            && !IgnoredVkCodes.Contains(raw.keyboard.VKey) // Check against ignored VK codes
                            )
                         {
                             int currentVkCode = raw.keyboard.VKey;

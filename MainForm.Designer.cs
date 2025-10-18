@@ -40,6 +40,9 @@
             this.buttonInfo = new System.Windows.Forms.Button();
             this.buttonOpenLog = new System.Windows.Forms.Button();
             this.buttonSoundHelp = new System.Windows.Forms.Button();
+            this.labelIgnore = new System.Windows.Forms.Label();
+            this.textBoxIgnore = new System.Windows.Forms.TextBox();
+            this.buttonIgnoreHelp = new System.Windows.Forms.Button();
             ((System.ComponentModel.ISupportInitialize)(this.numericUpDownThreshold)).BeginInit();
             this.SuspendLayout();
             // 
@@ -83,7 +86,7 @@
             this.numericUpDownThreshold.Size = new System.Drawing.Size(79, 26);
             this.numericUpDownThreshold.TabIndex = 2;
             this.numericUpDownThreshold.Value = new decimal(new int[] {
-            10,
+            50,
             0,
             0,
             0});
@@ -176,11 +179,40 @@
             this.buttonSoundHelp.UseVisualStyleBackColor = true;
             this.buttonSoundHelp.Click += new System.EventHandler(this.buttonSoundHelp_Click);
             // 
+            // labelIgnore
+            // 
+            this.labelIgnore.AutoSize = true;
+            this.labelIgnore.Location = new System.Drawing.Point(17, 286);
+            this.labelIgnore.Name = "labelIgnore";
+            this.labelIgnore.Size = new System.Drawing.Size(59, 20);
+            this.labelIgnore.TabIndex = 12;
+            this.labelIgnore.Text = "Ignore:";
+            // 
+            // textBoxIgnore
+            // 
+            this.textBoxIgnore.Location = new System.Drawing.Point(78, 283);
+            this.textBoxIgnore.Name = "textBoxIgnore";
+            this.textBoxIgnore.Size = new System.Drawing.Size(194, 26);
+            this.textBoxIgnore.TabIndex = 13;
+            // 
+            // buttonIgnoreHelp
+            // 
+            this.buttonIgnoreHelp.Location = new System.Drawing.Point(278, 278);
+            this.buttonIgnoreHelp.Name = "buttonIgnoreHelp";
+            this.buttonIgnoreHelp.Size = new System.Drawing.Size(27, 36);
+            this.buttonIgnoreHelp.TabIndex = 14;
+            this.buttonIgnoreHelp.Text = "?";
+            this.buttonIgnoreHelp.UseVisualStyleBackColor = true;
+            this.buttonIgnoreHelp.Click += new System.EventHandler(this.buttonIgnoreHelp_Click);
+            // 
             // MainForm
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(9F, 20F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(360, 279);
+            this.ClientSize = new System.Drawing.Size(360, 341);
+            this.Controls.Add(this.buttonIgnoreHelp);
+            this.Controls.Add(this.textBoxIgnore);
+            this.Controls.Add(this.labelIgnore);
             this.Controls.Add(this.buttonSoundHelp);
             this.Controls.Add(this.buttonOpenLog);
             this.Controls.Add(this.buttonInfo);
@@ -219,6 +251,9 @@
         private System.Windows.Forms.Button buttonInfo;
         private System.Windows.Forms.Button buttonOpenLog;
         private System.Windows.Forms.Button buttonSoundHelp;
+        private System.Windows.Forms.Label labelIgnore;
+        private System.Windows.Forms.TextBox textBoxIgnore;
+        private System.Windows.Forms.Button buttonIgnoreHelp;
     }
 }
 

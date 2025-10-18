@@ -30,12 +30,15 @@ namespace DoubleKeyPressDetector
 
             public static Argument SoundAlias { get; } = new Argument("-sound-alias", "Specify a custom system sound alias or file path to play when a double keypress is detected.");
 
+            public static Argument IgnoreKeys { get; } = new Argument("-ignore-keys", "Specify a comma-separated list of virtual key codes to ignore for double-press detection.");
+
             public static List<Argument> All { get; } = new List<Argument>
             {
                 Threshold,
                 Minimized,
                 StartOnLaunch,
-                SoundAlias
+                SoundAlias,
+                IgnoreKeys
             };
         }
 
@@ -78,15 +81,45 @@ namespace DoubleKeyPressDetector
                             textBoxSoundAlias.Text = args[i + 1];
                         }
                     }
-                }
+                    else if (string.Equals(args[i], AvailableArgs.IgnoreKeys.Arg, StringComparison.OrdinalIgnoreCase))
+                    {
+                        if (i + 1 < args.Length)
+                        {
+                            List<int> ignoredKeys = SplitIgnoredKeysString(args[i + 1]);
+                            textBoxIgnore.Text = string.Join(", ", ignoredKeys);
+                        }
+                    }
 
-                // After all the arguments are processed, start monitoring if requested
-                if (startNow)
-                {
-                    StartMonitor();
+                    // After all the arguments are processed, start monitoring if requested
+                    if (startNow)
+                    {
+                        StartMonitor();
+                    }
                 }
-
             }
+        }
+
+        // 
+        private List<int> SplitIgnoredKeysString(string rawStringIgnoredKeys)
+        {
+            List<int> ignoredKeys = [];
+            // Trim quotes and spaces
+            string[] parts = rawStringIgnoredKeys.Trim().Trim('"').Trim('\'')
+                .Split(new char[] { ',' }, StringSplitOptions.RemoveEmptyEntries);
+            foreach (string part in parts)
+            {
+                string trimmedPart = part.Trim();
+                if (int.TryParse(trimmedPart, out int keyCode))
+                {
+                    ignoredKeys.Add(keyCode);
+                }
+                else if (trimmedPart.StartsWith("0x", StringComparison.OrdinalIgnoreCase) &&
+                         int.TryParse(trimmedPart.Substring(2), System.Globalization.NumberStyles.HexNumber, null, out keyCode))
+                {
+                    ignoredKeys.Add(keyCode);
+                }
+            }
+            return ignoredKeys;
         }
 
         private void StartMonitor()
@@ -94,9 +127,10 @@ namespace DoubleKeyPressDetector
             DoubleKeyPressLogger.CreateLogIfNecessary();
 
             int threshold = (int)numericUpDownThreshold.Value;
+            List<int> ignoredKeys = SplitIgnoredKeysString(textBoxIgnore.Text);
 
             // Pass the labelStatus for UI feedback from RawInputHandler
-            bool started = RawInputHandler.InitializeRawInput(this.Handle, labelStatus, threshold);
+            bool started = RawInputHandler.InitializeRawInput(this.Handle, labelStatus, threshold, ignoredKeys);
 
             if (started)
             {
@@ -108,6 +142,7 @@ namespace DoubleKeyPressDetector
                 buttonStop.Enabled = true;
                 numericUpDownThreshold.Enabled = false; // Disable changing threshold while running
                 textBoxSoundAlias.Enabled = false; // Disable sound alias input while running
+                textBoxIgnore.Enabled = false; // Disable ignore keys input while running
                 labelStatus.Text = "Status: Running"; // Update status label directly here too
                 labelStatus.ForeColor = Color.Green;
             }
@@ -131,6 +166,7 @@ namespace DoubleKeyPressDetector
             buttonStop.Enabled = false;
             numericUpDownThreshold.Enabled = true;
             textBoxSoundAlias.Enabled = true; // Re-enable sound alias input
+            textBoxIgnore.Enabled = true; // Re-enable ignore keys input
             labelStatus.Text = "Status: Stopped"; // Update status label
             labelStatus.ForeColor = Color.Red;
         }
@@ -221,6 +257,21 @@ namespace DoubleKeyPressDetector
                 "- Relative path to a sound file (Relative to C:\\Windows\\Media)\n" +
                 "- The \"Alias\" of the sound, a list of which can be found in the registry at: HKEY_CURRENT_USER\\AppEvents\\Schemes\\Apps\\.Default\n\n" +
                 "If you leave this blank, the 'Speech Misrecognition' system sound will be played.";
+
+            MessageBox.Show(message, "Sound Help", MessageBoxButtons.OK, MessageBoxIcon.None);
+        }
+
+        private void buttonIgnoreHelp_Click(object sender, EventArgs e)
+        {
+            string message = "You can specify keys to ignore for double-press detection by entering their Virtual Key Codes here (either hex or decimal), separated by commas.\n\n" +
+                "For example, to ignore the Delete (46) and Backspace (8) keys, enter either:\n46,8   or   0x2E,0x08\n\n" +
+                "This is useful for keys that are often pressed rapidly as part of normal usage, so you can set a higher threshold for other keys without false positives.\n\n" +
+                "You can see a key's Virtual Key Code value in the log file.\n\n" +
+                "Some Common Virtual Key Codes:\n" +
+                "   Backspace: 8\n" +
+                "   Delete: 46\n" +
+                "   Space: 32";
+
 
             MessageBox.Show(message, "Sound Help", MessageBoxButtons.OK, MessageBoxIcon.None);
         }
