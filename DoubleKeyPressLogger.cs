@@ -13,6 +13,8 @@ namespace DoubleKeyPressDetector
         public int VirtualKeyCode { get; set; }
         public long TimeDelayMilliseconds { get; set; }
         public DateTime Timestamp { get; set; }
+        public long CurrentPressTimerMilliseconds { get; set; }
+        public long PreviousPressTimerMilliseconds { get; set; }
         public string DevicePath { get; set; }
     }
 
@@ -21,7 +23,7 @@ namespace DoubleKeyPressDetector
         private static readonly string LogFilePath = Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "double_press_log.log");
         private static readonly object _lock = new object(); // For thread safety
 
-        public static void LogEvent(int vkCode, long delayMs, string devicePath)
+        public static void LogEvent(int vkCode, long delayMs, string devicePath, long previousTimestamp, long currentTimestamp)
         {
             string keyName = Enum.GetName(typeof(Keys), vkCode) ?? $"VK_{vkCode:X2}";
 
@@ -30,6 +32,8 @@ namespace DoubleKeyPressDetector
                 KeyName = keyName,
                 VirtualKeyCode = vkCode,
                 TimeDelayMilliseconds = delayMs,
+                PreviousPressTimerMilliseconds = previousTimestamp,
+                CurrentPressTimerMilliseconds = currentTimestamp,
                 Timestamp = DateTime.Now,
                 DevicePath = devicePath
             };
@@ -56,7 +60,8 @@ namespace DoubleKeyPressDetector
                 logLine.Append($"TimeDelayMilliseconds: {logEntry.TimeDelayMilliseconds}\t\t");
                 logLine.Append($"VirtualKeyCode: {logEntry.VirtualKeyCode}\t\t");
                 logLine.Append($"Timestamp: {formattedTime}\t\t");
-                logLine.Append($"DevicePath: {logEntry.DevicePath}");
+                logLine.Append($"DevicePath: {logEntry.DevicePath}\t\t");
+                logLine.Append($"Previous/Current Timer Ms: {logEntry.PreviousPressTimerMilliseconds} | {logEntry.CurrentPressTimerMilliseconds}");
 
                 // Use lock for thread-safe file access
                 lock (_lock)

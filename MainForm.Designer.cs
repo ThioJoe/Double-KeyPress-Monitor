@@ -43,6 +43,7 @@
             this.labelIgnore = new System.Windows.Forms.Label();
             this.textBoxIgnore = new System.Windows.Forms.TextBox();
             this.buttonIgnoreHelp = new System.Windows.Forms.Button();
+            this.buttonCreateShortcut = new System.Windows.Forms.Button();
             ((System.ComponentModel.ISupportInitialize)(this.numericUpDownThreshold)).BeginInit();
             this.SuspendLayout();
             // 
@@ -182,7 +183,7 @@
             // labelIgnore
             // 
             this.labelIgnore.AutoSize = true;
-            this.labelIgnore.Location = new System.Drawing.Point(17, 286);
+            this.labelIgnore.Location = new System.Drawing.Point(16, 269);
             this.labelIgnore.Name = "labelIgnore";
             this.labelIgnore.Size = new System.Drawing.Size(59, 20);
             this.labelIgnore.TabIndex = 12;
@@ -190,14 +191,14 @@
             // 
             // textBoxIgnore
             // 
-            this.textBoxIgnore.Location = new System.Drawing.Point(78, 283);
+            this.textBoxIgnore.Location = new System.Drawing.Point(77, 266);
             this.textBoxIgnore.Name = "textBoxIgnore";
-            this.textBoxIgnore.Size = new System.Drawing.Size(194, 26);
+            this.textBoxIgnore.Size = new System.Drawing.Size(239, 26);
             this.textBoxIgnore.TabIndex = 13;
             // 
             // buttonIgnoreHelp
             // 
-            this.buttonIgnoreHelp.Location = new System.Drawing.Point(278, 278);
+            this.buttonIgnoreHelp.Location = new System.Drawing.Point(321, 266);
             this.buttonIgnoreHelp.Name = "buttonIgnoreHelp";
             this.buttonIgnoreHelp.Size = new System.Drawing.Size(27, 36);
             this.buttonIgnoreHelp.TabIndex = 14;
@@ -205,11 +206,22 @@
             this.buttonIgnoreHelp.UseVisualStyleBackColor = true;
             this.buttonIgnoreHelp.Click += new System.EventHandler(this.buttonIgnoreHelp_Click);
             // 
+            // buttonCreateShortcut
+            // 
+            this.buttonCreateShortcut.Location = new System.Drawing.Point(34, 309);
+            this.buttonCreateShortcut.Name = "buttonCreateShortcut";
+            this.buttonCreateShortcut.Size = new System.Drawing.Size(300, 34);
+            this.buttonCreateShortcut.TabIndex = 15;
+            this.buttonCreateShortcut.Text = "Create Shortcut With Current Settings";
+            this.buttonCreateShortcut.UseVisualStyleBackColor = true;
+            this.buttonCreateShortcut.Click += new System.EventHandler(this.buttonCreateShortcut_Click);
+            // 
             // MainForm
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(9F, 20F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(360, 341);
+            this.ClientSize = new System.Drawing.Size(371, 355);
+            this.Controls.Add(this.buttonCreateShortcut);
             this.Controls.Add(this.buttonIgnoreHelp);
             this.Controls.Add(this.textBoxIgnore);
             this.Controls.Add(this.labelIgnore);
@@ -254,6 +266,7 @@
         private System.Windows.Forms.Label labelIgnore;
         private System.Windows.Forms.TextBox textBoxIgnore;
         private System.Windows.Forms.Button buttonIgnoreHelp;
+        private System.Windows.Forms.Button buttonCreateShortcut;
     }
 }
 

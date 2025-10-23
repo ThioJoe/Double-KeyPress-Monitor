@@ -1,7 +1,9 @@
-﻿using Monitor_Double_Keypresses;
+﻿//using IWshRuntimeLibrary;
+using Monitor_Double_Keypresses;
 using System;
 using System.Collections.Generic;
 using System.Drawing;
+using System.IO;
 using System.Runtime.InteropServices;
 using System.Windows.Forms;
 
@@ -185,7 +187,7 @@ namespace DoubleKeyPressDetector
         private void RawInputHandler_DoublePressDetected(object sender, DoublePressEventArgs e)
         {
             // Call the logger
-            DoubleKeyPressLogger.LogEvent(e.VirtualKeyCode, e.DelayMilliseconds, e.DevicePath);
+            DoubleKeyPressLogger.LogEvent(e.VirtualKeyCode, e.DelayMilliseconds, e.DevicePath, e.PreviousPressTimestamp, e.CurrentPressTimestamp);
             // Play sound if specified
             if (checkBoxPlaySound.Checked == true)
             {
@@ -274,6 +276,75 @@ namespace DoubleKeyPressDetector
 
 
             MessageBox.Show(message, "Sound Help", MessageBoxButtons.OK, MessageBoxIcon.None);
+        }
+
+        // Creates .lnk shortcut on the Desktop with appropriate arguments for the current settings
+        //private void buttonCreateShortcut_Click(object sender, EventArgs e)
+        //{
+
+        //    WshShell wsh = new WshShell();
+        //    IWshRuntimeLibrary.IWshShortcut shortcut = wsh.CreateShortcut(
+        //    Environment.GetFolderPath(Environment.SpecialFolder.Desktop) + "\\shorcut.lnk") as IWshRuntimeLibrary.IWshShortcut;
+        //    shortcut.Arguments = "";
+        //    shortcut.TargetPath = "c:\\app\\myftp.exe";
+        //    // not sure about what this is for
+        //    shortcut.WindowStyle = 1;
+        //    shortcut.Description = "my shortcut description";
+        //    shortcut.WorkingDirectory = "c:\\app";
+        //    shortcut.IconLocation = "specify icon location";
+        //    shortcut.Save();
+        //}
+
+        private void buttonCreateShortcut_Click(object sender, EventArgs e)
+        {
+            //try
+            //{
+            //    string executablePath = Application.ExecutablePath;
+            //    string desktopPath = Environment.GetFolderPath(Environment.SpecialFolder.Desktop);
+            //    string shortcutPath = Path.Combine(desktopPath, "Double Key Press Detector.lnk");
+
+            //    WshShell shell = new WshShell();
+            //    IWshShortcut shortcut = (IWshShortcut)shell.CreateShortcut(shortcutPath);
+
+            //    // Set the current settings as arguments
+            //    var args = new List<string>();
+            //    if (numericUpDownThreshold.Value != 100) // Only add if different from default
+            //    {
+            //        args.Add(AvailableArgs.Threshold.Arg);
+            //        args.Add(numericUpDownThreshold.Value.ToString());
+            //    }
+            //    if (!string.IsNullOrEmpty(textBoxSoundAlias.Text))
+            //    {
+            //        args.Add(AvailableArgs.SoundAlias.Arg);
+            //        args.Add($"\"{textBoxSoundAlias.Text}\"");
+            //    }
+            //    if (!string.IsNullOrEmpty(textBoxIgnore.Text))
+            //    {
+            //        args.Add(AvailableArgs.IgnoreKeys.Arg);
+            //        args.Add($"\"{textBoxIgnore.Text}\"");
+            //    }
+
+            //    shortcut.Arguments = string.Join(" ", args);
+            //    shortcut.TargetPath = executablePath;
+            //    shortcut.WindowStyle = 1; // Normal window
+            //    shortcut.Description = "Double Key Press Detector Application";
+            //    shortcut.WorkingDirectory = Path.GetDirectoryName(executablePath) ?? "";
+            //    shortcut.IconLocation = executablePath + ",0"; // Use the first icon from the exe
+            //    shortcut.Save();
+
+            //    MessageBox.Show("Shortcut created successfully on the desktop!", "Success",
+            //        MessageBoxButtons.OK, MessageBoxIcon.Information);
+            //}
+            //catch (COMException ex)
+            //{
+            //    MessageBox.Show($"Error creating shortcut: {ex.Message}", "Error",
+            //        MessageBoxButtons.OK, MessageBoxIcon.Error);
+            //}
+            //catch (Exception ex)
+            //{
+            //    MessageBox.Show($"Unexpected error: {ex.Message}", "Error",
+            //        MessageBoxButtons.OK, MessageBoxIcon.Error);
+            //}
         }
     }
 }
