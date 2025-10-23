@@ -55,8 +55,18 @@ namespace DoubleKeyPressDetector
 
                 string formattedTime = logEntry.Timestamp.ToLocalTime().ToString("yyyy-MM-dd hh:mm:ss.fff tt");
 
+                // How many tabs to use depending on the length of the key name string. 1-2chars, 3 tabs, >= 3 chars, 2 tab, >= 7 1 tab
+                int len = logEntry.KeyName.Length;
+                string tabs = string.Empty;
+                if (len <= 2)
+                    tabs = "\t\t\t";
+                else if (len >= 3)
+                    tabs = "\t\t";
+                else if (len >= 7)
+                    tabs = "\t";
+
                 StringBuilder logLine = new StringBuilder();
-                logLine.Append($"KeyName: {logEntry.KeyName}\t\t");
+                logLine.Append($"KeyName: {logEntry.KeyName}{tabs}");
                 logLine.Append($"TimeDelayMilliseconds: {logEntry.TimeDelayMilliseconds}\t\t");
                 logLine.Append($"VirtualKeyCode: {logEntry.VirtualKeyCode}\t\t");
                 logLine.Append($"Timestamp: {formattedTime}\t\t");

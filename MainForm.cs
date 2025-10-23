@@ -1,4 +1,5 @@
-﻿//using IWshRuntimeLibrary;
+﻿// Monitor-Double-Keypresses/MainForm.cs
+//using IWshRuntimeLibrary;
 using Monitor_Double_Keypresses;
 using System;
 using System.Collections.Generic;
@@ -91,12 +92,12 @@ namespace DoubleKeyPressDetector
                             textBoxIgnore.Text = string.Join(", ", ignoredKeys);
                         }
                     }
+                }
 
-                    // After all the arguments are processed, start monitoring if requested
-                    if (startNow)
-                    {
-                        StartMonitor();
-                    }
+                // After all the arguments are processed, start monitoring if requested
+                if (startNow)
+                {
+                    StartMonitor();
                 }
             }
         }
