@@ -1,4 +1,5 @@
-﻿using System;
+﻿// Monitor-Double-Keypresses/DoubleKeyPressLogger.cs
+using System;
 using System.IO;
 using System.Text;
 using System.Threading;
@@ -58,12 +59,12 @@ namespace DoubleKeyPressDetector
                 // How many tabs to use depending on the length of the key name string. 1-2chars, 3 tabs, >= 3 chars, 2 tab, >= 7 1 tab
                 int len = logEntry.KeyName.Length;
                 string tabs = string.Empty;
-                if (len <= 2)
-                    tabs = "\t\t\t";
+                if (len >= 7)
+                    tabs = "\t";
                 else if (len >= 3)
                     tabs = "\t\t";
-                else if (len >= 7)
-                    tabs = "\t";
+                else // len <= 2
+                    tabs = "\t\t\t";
 
                 StringBuilder logLine = new StringBuilder();
                 logLine.Append($"KeyName: {logEntry.KeyName}{tabs}");
