@@ -197,6 +197,7 @@ namespace DoubleKeyPressDetector
             if (RawInputWatcherActive && uMsg == WinEnums.WM_MESSAGE.WM_INPUT)
             {
                 uint dwSize = 0;
+                long currentTimestamp = _stopwatch.ElapsedMilliseconds;
 
                 // First call to get the required size
                 GetRawInputData(lParam, (uint)WinEnums.uiCommand.RID_INPUT, IntPtr.Zero, ref dwSize, rawInputHeaderSize);
@@ -224,7 +225,6 @@ namespace DoubleKeyPressDetector
                            )
                         {
                             int currentVkCode = raw.keyboard.VKey;
-                            long currentTimestamp = _stopwatch.ElapsedMilliseconds;
 
                             //DBUEG: Convert raw variable to string after serialization
                             //string rawString = RawDataToString(raw);
