@@ -54,7 +54,7 @@
             // 
             // buttonStart
             // 
-            this.buttonStart.Location = new System.Drawing.Point(34, 75);
+            this.buttonStart.Location = new System.Drawing.Point(48, 96);
             this.buttonStart.Margin = new System.Windows.Forms.Padding(3, 4, 3, 4);
             this.buttonStart.Name = "buttonStart";
             this.buttonStart.Size = new System.Drawing.Size(135, 38);
@@ -65,7 +65,7 @@
             // 
             // buttonStop
             // 
-            this.buttonStop.Location = new System.Drawing.Point(191, 75);
+            this.buttonStop.Location = new System.Drawing.Point(189, 96);
             this.buttonStop.Margin = new System.Windows.Forms.Padding(3, 4, 3, 4);
             this.buttonStop.Name = "buttonStop";
             this.buttonStop.Size = new System.Drawing.Size(135, 38);
@@ -76,7 +76,7 @@
             // 
             // numericUpDownThreshold
             // 
-            this.numericUpDownThreshold.Location = new System.Drawing.Point(154, 27);
+            this.numericUpDownThreshold.Location = new System.Drawing.Point(189, 60);
             this.numericUpDownThreshold.Margin = new System.Windows.Forms.Padding(3, 4, 3, 4);
             this.numericUpDownThreshold.Maximum = new decimal(new int[] {
             1000,
@@ -100,7 +100,7 @@
             // labelThreshold
             // 
             this.labelThreshold.AutoSize = true;
-            this.labelThreshold.Location = new System.Drawing.Point(30, 28);
+            this.labelThreshold.Location = new System.Drawing.Point(65, 62);
             this.labelThreshold.Name = "labelThreshold";
             this.labelThreshold.Size = new System.Drawing.Size(118, 20);
             this.labelThreshold.TabIndex = 3;
@@ -110,7 +110,7 @@
             // 
             this.labelStatus.AutoSize = true;
             this.labelStatus.Font = new System.Drawing.Font("Microsoft Sans Serif", 9F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.labelStatus.Location = new System.Drawing.Point(30, 138);
+            this.labelStatus.Location = new System.Drawing.Point(106, 145);
             this.labelStatus.Name = "labelStatus";
             this.labelStatus.Size = new System.Drawing.Size(153, 22);
             this.labelStatus.TabIndex = 4;
@@ -121,7 +121,7 @@
             this.checkBoxPlaySound.AutoSize = true;
             this.checkBoxPlaySound.Checked = true;
             this.checkBoxPlaySound.CheckState = System.Windows.Forms.CheckState.Checked;
-            this.checkBoxPlaySound.Location = new System.Drawing.Point(20, 187);
+            this.checkBoxPlaySound.Location = new System.Drawing.Point(44, 177);
             this.checkBoxPlaySound.Name = "checkBoxPlaySound";
             this.checkBoxPlaySound.Size = new System.Drawing.Size(213, 24);
             this.checkBoxPlaySound.TabIndex = 5;
@@ -130,9 +130,9 @@
             // 
             // buttonPreviewSound
             // 
-            this.buttonPreviewSound.Location = new System.Drawing.Point(239, 180);
+            this.buttonPreviewSound.Location = new System.Drawing.Point(254, 174);
             this.buttonPreviewSound.Name = "buttonPreviewSound";
-            this.buttonPreviewSound.Size = new System.Drawing.Size(95, 36);
+            this.buttonPreviewSound.Size = new System.Drawing.Size(95, 29);
             this.buttonPreviewSound.TabIndex = 6;
             this.buttonPreviewSound.Text = "🔊 Preview";
             this.buttonPreviewSound.UseVisualStyleBackColor = true;
@@ -140,7 +140,7 @@
             // 
             // textBoxSoundAlias
             // 
-            this.textBoxSoundAlias.Location = new System.Drawing.Point(122, 231);
+            this.textBoxSoundAlias.Location = new System.Drawing.Point(127, 218);
             this.textBoxSoundAlias.Name = "textBoxSoundAlias";
             this.textBoxSoundAlias.Size = new System.Drawing.Size(194, 26);
             this.textBoxSoundAlias.TabIndex = 7;
@@ -148,7 +148,7 @@
             // labelSoundAlias
             // 
             this.labelSoundAlias.AutoSize = true;
-            this.labelSoundAlias.Location = new System.Drawing.Point(13, 231);
+            this.labelSoundAlias.Location = new System.Drawing.Point(18, 218);
             this.labelSoundAlias.Name = "labelSoundAlias";
             this.labelSoundAlias.Size = new System.Drawing.Size(98, 20);
             this.labelSoundAlias.TabIndex = 8;
@@ -156,19 +156,19 @@
             // 
             // buttonInfo
             // 
-            this.buttonInfo.Location = new System.Drawing.Point(321, 12);
+            this.buttonInfo.Location = new System.Drawing.Point(113, 13);
             this.buttonInfo.Name = "buttonInfo";
-            this.buttonInfo.Size = new System.Drawing.Size(27, 36);
+            this.buttonInfo.Size = new System.Drawing.Size(56, 36);
             this.buttonInfo.TabIndex = 9;
-            this.buttonInfo.Text = "?";
+            this.buttonInfo.Text = "Args";
             this.buttonInfo.UseVisualStyleBackColor = true;
             this.buttonInfo.Click += new System.EventHandler(this.buttonInfo_Click);
             // 
             // buttonOpenLog
             // 
-            this.buttonOpenLog.Location = new System.Drawing.Point(239, 135);
+            this.buttonOpenLog.Location = new System.Drawing.Point(12, 12);
             this.buttonOpenLog.Name = "buttonOpenLog";
-            this.buttonOpenLog.Size = new System.Drawing.Size(95, 31);
+            this.buttonOpenLog.Size = new System.Drawing.Size(95, 37);
             this.buttonOpenLog.TabIndex = 10;
             this.buttonOpenLog.Text = "Open Log";
             this.buttonOpenLog.UseCompatibleTextRendering = true;
@@ -177,7 +177,7 @@
             // 
             // buttonSoundHelp
             // 
-            this.buttonSoundHelp.Location = new System.Drawing.Point(322, 226);
+            this.buttonSoundHelp.Location = new System.Drawing.Point(327, 213);
             this.buttonSoundHelp.Name = "buttonSoundHelp";
             this.buttonSoundHelp.Size = new System.Drawing.Size(27, 36);
             this.buttonSoundHelp.TabIndex = 11;
@@ -188,7 +188,7 @@
             // labelIgnore
             // 
             this.labelIgnore.AutoSize = true;
-            this.labelIgnore.Location = new System.Drawing.Point(16, 269);
+            this.labelIgnore.Location = new System.Drawing.Point(21, 256);
             this.labelIgnore.Name = "labelIgnore";
             this.labelIgnore.Size = new System.Drawing.Size(98, 20);
             this.labelIgnore.TabIndex = 12;
@@ -196,14 +196,14 @@
             // 
             // textBoxIgnore
             // 
-            this.textBoxIgnore.Location = new System.Drawing.Point(122, 266);
+            this.textBoxIgnore.Location = new System.Drawing.Point(127, 253);
             this.textBoxIgnore.Name = "textBoxIgnore";
             this.textBoxIgnore.Size = new System.Drawing.Size(194, 26);
             this.textBoxIgnore.TabIndex = 13;
             // 
             // buttonIgnoreHelp
             // 
-            this.buttonIgnoreHelp.Location = new System.Drawing.Point(321, 266);
+            this.buttonIgnoreHelp.Location = new System.Drawing.Point(326, 253);
             this.buttonIgnoreHelp.Name = "buttonIgnoreHelp";
             this.buttonIgnoreHelp.Size = new System.Drawing.Size(27, 36);
             this.buttonIgnoreHelp.TabIndex = 14;
@@ -213,19 +213,19 @@
             // 
             // buttonCreateShortcut
             // 
-            this.buttonCreateShortcut.Location = new System.Drawing.Point(77, 309);
+            this.buttonCreateShortcut.Location = new System.Drawing.Point(212, 11);
             this.buttonCreateShortcut.Name = "buttonCreateShortcut";
-            this.buttonCreateShortcut.Size = new System.Drawing.Size(199, 34);
+            this.buttonCreateShortcut.Size = new System.Drawing.Size(137, 27);
             this.buttonCreateShortcut.TabIndex = 15;
-            this.buttonCreateShortcut.Text = "Copy Launch Command";
+            this.buttonCreateShortcut.Text = "Copy Command";
             this.buttonCreateShortcut.UseVisualStyleBackColor = true;
             this.buttonCreateShortcut.Click += new System.EventHandler(this.buttonCreateShortcut_Click);
             // 
             // buttonCopyCommandHelp
             // 
-            this.buttonCopyCommandHelp.Location = new System.Drawing.Point(282, 307);
+            this.buttonCopyCommandHelp.Location = new System.Drawing.Point(355, 11);
             this.buttonCopyCommandHelp.Name = "buttonCopyCommandHelp";
-            this.buttonCopyCommandHelp.Size = new System.Drawing.Size(27, 36);
+            this.buttonCopyCommandHelp.Size = new System.Drawing.Size(27, 27);
             this.buttonCopyCommandHelp.TabIndex = 16;
             this.buttonCopyCommandHelp.Text = "?";
             this.buttonCopyCommandHelp.UseVisualStyleBackColor = true;
@@ -236,7 +236,7 @@
             this.labelCopyCheck.AutoSize = true;
             this.labelCopyCheck.Font = new System.Drawing.Font("Microsoft Sans Serif", 10F);
             this.labelCopyCheck.ForeColor = System.Drawing.Color.SeaGreen;
-            this.labelCopyCheck.Location = new System.Drawing.Point(38, 312);
+            this.labelCopyCheck.Location = new System.Drawing.Point(184, 11);
             this.labelCopyCheck.Name = "labelCopyCheck";
             this.labelCopyCheck.Size = new System.Drawing.Size(33, 25);
             this.labelCopyCheck.TabIndex = 17;
@@ -245,9 +245,9 @@
             // 
             // buttonRemoveLastEntry
             // 
-            this.buttonRemoveLastEntry.Location = new System.Drawing.Point(43, 366);
+            this.buttonRemoveLastEntry.Location = new System.Drawing.Point(53, 299);
             this.buttonRemoveLastEntry.Name = "buttonRemoveLastEntry";
-            this.buttonRemoveLastEntry.Size = new System.Drawing.Size(254, 45);
+            this.buttonRemoveLastEntry.Size = new System.Drawing.Size(268, 38);
             this.buttonRemoveLastEntry.TabIndex = 18;
             this.buttonRemoveLastEntry.Text = "Remove Last Log Entry";
             this.buttonRemoveLastEntry.UseVisualStyleBackColor = true;
@@ -255,7 +255,7 @@
             // 
             // buttonRemoveLastEntryHelp
             // 
-            this.buttonRemoveLastEntryHelp.Location = new System.Drawing.Point(303, 370);
+            this.buttonRemoveLastEntryHelp.Location = new System.Drawing.Point(326, 301);
             this.buttonRemoveLastEntryHelp.Name = "buttonRemoveLastEntryHelp";
             this.buttonRemoveLastEntryHelp.Size = new System.Drawing.Size(27, 36);
             this.buttonRemoveLastEntryHelp.TabIndex = 19;
@@ -268,7 +268,7 @@
             this.labelRemoveLastEntry.AutoSize = true;
             this.labelRemoveLastEntry.Font = new System.Drawing.Font("Microsoft Sans Serif", 10F);
             this.labelRemoveLastEntry.ForeColor = System.Drawing.Color.SeaGreen;
-            this.labelRemoveLastEntry.Location = new System.Drawing.Point(4, 374);
+            this.labelRemoveLastEntry.Location = new System.Drawing.Point(20, 301);
             this.labelRemoveLastEntry.Name = "labelRemoveLastEntry";
             this.labelRemoveLastEntry.Size = new System.Drawing.Size(33, 25);
             this.labelRemoveLastEntry.TabIndex = 20;
@@ -279,11 +279,10 @@
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(9F, 20F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(371, 433);
+            this.ClientSize = new System.Drawing.Size(392, 355);
             this.Controls.Add(this.labelRemoveLastEntry);
             this.Controls.Add(this.buttonRemoveLastEntryHelp);
             this.Controls.Add(this.buttonRemoveLastEntry);
-            this.Controls.Add(this.labelCopyCheck);
             this.Controls.Add(this.buttonCopyCommandHelp);
             this.Controls.Add(this.buttonCreateShortcut);
             this.Controls.Add(this.buttonIgnoreHelp);
@@ -301,6 +300,7 @@
             this.Controls.Add(this.numericUpDownThreshold);
             this.Controls.Add(this.buttonStop);
             this.Controls.Add(this.buttonStart);
+            this.Controls.Add(this.labelCopyCheck);
             this.FormBorderStyle = System.Windows.Forms.FormBorderStyle.FixedSingle;
             this.Margin = new System.Windows.Forms.Padding(3, 4, 3, 4);
             this.MaximizeBox = false;
