@@ -46,6 +46,9 @@
             this.buttonCreateShortcut = new System.Windows.Forms.Button();
             this.buttonCopyCommandHelp = new System.Windows.Forms.Button();
             this.labelCopyCheck = new System.Windows.Forms.Label();
+            this.buttonRemoveLastEntry = new System.Windows.Forms.Button();
+            this.buttonRemoveLastEntryHelp = new System.Windows.Forms.Button();
+            this.labelRemoveLastEntry = new System.Windows.Forms.Label();
             ((System.ComponentModel.ISupportInitialize)(this.numericUpDownThreshold)).BeginInit();
             this.SuspendLayout();
             // 
@@ -240,11 +243,46 @@
             this.labelCopyCheck.Text = "✔️";
             this.labelCopyCheck.Visible = false;
             // 
+            // buttonRemoveLastEntry
+            // 
+            this.buttonRemoveLastEntry.Location = new System.Drawing.Point(43, 366);
+            this.buttonRemoveLastEntry.Name = "buttonRemoveLastEntry";
+            this.buttonRemoveLastEntry.Size = new System.Drawing.Size(254, 45);
+            this.buttonRemoveLastEntry.TabIndex = 18;
+            this.buttonRemoveLastEntry.Text = "Remove Last Log Entry";
+            this.buttonRemoveLastEntry.UseVisualStyleBackColor = true;
+            this.buttonRemoveLastEntry.Click += new System.EventHandler(this.buttonRemoveLastEntry_Click);
+            // 
+            // buttonRemoveLastEntryHelp
+            // 
+            this.buttonRemoveLastEntryHelp.Location = new System.Drawing.Point(303, 370);
+            this.buttonRemoveLastEntryHelp.Name = "buttonRemoveLastEntryHelp";
+            this.buttonRemoveLastEntryHelp.Size = new System.Drawing.Size(27, 36);
+            this.buttonRemoveLastEntryHelp.TabIndex = 19;
+            this.buttonRemoveLastEntryHelp.Text = "?";
+            this.buttonRemoveLastEntryHelp.UseVisualStyleBackColor = true;
+            this.buttonRemoveLastEntryHelp.Click += new System.EventHandler(this.buttonRemoveLastEntryHelp_Click);
+            // 
+            // labelRemoveLastEntry
+            // 
+            this.labelRemoveLastEntry.AutoSize = true;
+            this.labelRemoveLastEntry.Font = new System.Drawing.Font("Microsoft Sans Serif", 10F);
+            this.labelRemoveLastEntry.ForeColor = System.Drawing.Color.SeaGreen;
+            this.labelRemoveLastEntry.Location = new System.Drawing.Point(4, 374);
+            this.labelRemoveLastEntry.Name = "labelRemoveLastEntry";
+            this.labelRemoveLastEntry.Size = new System.Drawing.Size(33, 25);
+            this.labelRemoveLastEntry.TabIndex = 20;
+            this.labelRemoveLastEntry.Text = "✔️";
+            this.labelRemoveLastEntry.Visible = false;
+            // 
             // MainForm
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(9F, 20F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(371, 355);
+            this.ClientSize = new System.Drawing.Size(371, 433);
+            this.Controls.Add(this.labelRemoveLastEntry);
+            this.Controls.Add(this.buttonRemoveLastEntryHelp);
+            this.Controls.Add(this.buttonRemoveLastEntry);
             this.Controls.Add(this.labelCopyCheck);
             this.Controls.Add(this.buttonCopyCommandHelp);
             this.Controls.Add(this.buttonCreateShortcut);
@@ -295,6 +333,9 @@
         private System.Windows.Forms.Button buttonCreateShortcut;
         private System.Windows.Forms.Button buttonCopyCommandHelp;
         private System.Windows.Forms.Label labelCopyCheck;
+        private System.Windows.Forms.Button buttonRemoveLastEntry;
+        private System.Windows.Forms.Button buttonRemoveLastEntryHelp;
+        private System.Windows.Forms.Label labelRemoveLastEntry;
     }
 }
 

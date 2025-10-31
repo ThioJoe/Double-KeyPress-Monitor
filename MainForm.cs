@@ -346,21 +346,21 @@ namespace DoubleKeyPressDetector
             if (!string.IsNullOrEmpty(fullCommand))
             {
                 Clipboard.SetText(fullCommand);
-                ShowCopyCheckForTime(300);
+                ShowLabelForTime(labelCopyCheck, 300);
             }
         }
 
-        private async void ShowCopyCheckForTime(int milliseconds)
+        private async void ShowLabelForTime(Label label, int milliseconds)
         {
             if (this.InvokeRequired)
             {
-                BeginInvoke((Action)(() => ShowCopyCheckForTime(milliseconds)));
+                BeginInvoke((Action)(() => ShowLabelForTime(label, milliseconds)));
                 return;
             }
 
-            labelCopyCheck.Visible = true;
+            label.Visible = true;
             await Task.Delay(milliseconds);
-            labelCopyCheck.Visible = false;
+            label.Visible = false;
         }
 
         private void buttonCopyCommandHelp_Click(object sender, EventArgs e)
@@ -370,9 +370,24 @@ namespace DoubleKeyPressDetector
                 "Tip: To make it start with windows, you can put the shortcut in: \n%APPDATA%\\Microsoft\\Windows\\Start Menu\\Programs\\Startup \n\n" +
                 "Note:  The \"-minimized\" and \"-start-on-launch\" args is always added. Just remove those if you don't want that.";
 
-
-
             MessageBox.Show(message, "Sound Help", MessageBoxButtons.OK, MessageBoxIcon.None);
+        }
+
+        private void buttonRemoveLastEntryHelp_Click(object sender, EventArgs e)
+        {
+            string message = "If the app registered a double keypress you know was intentional, press this button to remove the most recent line from the log file.";
+
+            MessageBox.Show(message);
+        }
+
+        private void buttonRemoveLastEntry_Click(object sender, EventArgs e)
+        {
+            bool result = DoubleKeyPressLogger.RemoveLastEntry();
+
+            if (result == true)
+            {
+                ShowLabelForTime(labelRemoveLastEntry, 300);
+            }
         }
     }
 }

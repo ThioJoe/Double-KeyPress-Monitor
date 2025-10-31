@@ -1,6 +1,7 @@
 ﻿// Monitor-Double-Keypresses/DoubleKeyPressLogger.cs
 using System;
 using System.IO;
+using System.Linq;
 using System.Text;
 using System.Threading;
 using System.Windows.Forms; // Required for Keys enum
@@ -85,6 +86,31 @@ namespace DoubleKeyPressDetector
             {
                 // Basic error handling: Log to debug output or console
                 System.Diagnostics.Debug.WriteLine($"Error logging double press: {ex.Message}");
+            }
+        }
+
+        public static bool RemoveLastEntry()
+        {
+            lock (_lock)
+            {
+                try
+                {
+                    if (!File.Exists(LogFilePath))
+                        return false;
+
+                    string[] lines = File.ReadAllLines(LogFilePath);
+
+                    if (lines.Length == 0)
+                        return false;
+
+                    File.WriteAllLines(LogFilePath, lines.Take(lines.Length - 1));
+                    return true;
+                }
+                catch (Exception ex)
+                {
+                    System.Diagnostics.Debug.WriteLine($"Error removing last line: {ex.Message}");
+                    return false;
+                }
             }
         }
 
