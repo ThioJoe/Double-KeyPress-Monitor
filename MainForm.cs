@@ -6,6 +6,7 @@ using System.Collections.Generic;
 using System.Drawing;
 using System.IO;
 using System.Runtime.InteropServices;
+using System.Threading.Tasks;
 using System.Windows.Forms;
 
 [assembly: DefaultDllImportSearchPaths(DllImportSearchPath.System32)]
@@ -88,7 +89,7 @@ namespace DoubleKeyPressDetector
                     {
                         if (i + 1 < args.Length)
                         {
-                            List<int> ignoredKeys = SplitIgnoredKeysString(args[i + 1]);
+                            List<int> ignoredKeys = ValidateAndSplitIgnoredKeysString(args[i + 1]);
                             textBoxIgnore.Text = string.Join(", ", ignoredKeys);
                         }
                     }
@@ -103,12 +104,15 @@ namespace DoubleKeyPressDetector
         }
 
         // 
-        private List<int> SplitIgnoredKeysString(string rawStringIgnoredKeys)
+        private List<int> ValidateAndSplitIgnoredKeysString(string rawStringIgnoredKeys)
         {
             List<int> ignoredKeys = [];
+            List<string> invalidParts = [];
+
             // Trim quotes and spaces
             string[] parts = rawStringIgnoredKeys.Trim().Trim('"').Trim('\'')
                 .Split(new char[] { ',' }, StringSplitOptions.RemoveEmptyEntries);
+
             foreach (string part in parts)
             {
                 string trimmedPart = part.Trim();
@@ -121,7 +125,18 @@ namespace DoubleKeyPressDetector
                 {
                     ignoredKeys.Add(keyCode);
                 }
+                else
+                {
+                    invalidParts.Add(trimmedPart);
+                }
             }
+
+            if (invalidParts.Count > 0)
+            { 
+                string invalidPartsMsg = string.Join("\n    ", invalidParts);
+                MessageBox.Show($"The following values in the ignored keys box are invalid:\n    {invalidPartsMsg}", "Warning: Invalid Value", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+            }
+
             return ignoredKeys;
         }
 
@@ -130,7 +145,15 @@ namespace DoubleKeyPressDetector
             DoubleKeyPressLogger.CreateLogIfNecessary();
 
             int threshold = (int)numericUpDownThreshold.Value;
-            List<int> ignoredKeys = SplitIgnoredKeysString(textBoxIgnore.Text);
+
+            // The minimum on the UpDown control should already be 1, but just in case, make sure the resulting threshold is always 1 or more
+            if (threshold <=0)
+            {
+                threshold = 1;
+                numericUpDownThreshold.Value = threshold;
+            }
+
+            List<int> ignoredKeys = ValidateAndSplitIgnoredKeysString(textBoxIgnore.Text);
 
             // Pass the labelStatus for UI feedback from RawInputHandler
             bool started = RawInputHandler.InitializeRawInput(this.Handle, labelStatus, threshold, ignoredKeys);
@@ -279,73 +302,77 @@ namespace DoubleKeyPressDetector
             MessageBox.Show(message, "Sound Help", MessageBoxButtons.OK, MessageBoxIcon.None);
         }
 
-        // Creates .lnk shortcut on the Desktop with appropriate arguments for the current settings
-        //private void buttonCreateShortcut_Click(object sender, EventArgs e)
-        //{
-
-        //    WshShell wsh = new WshShell();
-        //    IWshRuntimeLibrary.IWshShortcut shortcut = wsh.CreateShortcut(
-        //    Environment.GetFolderPath(Environment.SpecialFolder.Desktop) + "\\shorcut.lnk") as IWshRuntimeLibrary.IWshShortcut;
-        //    shortcut.Arguments = "";
-        //    shortcut.TargetPath = "c:\\app\\myftp.exe";
-        //    // not sure about what this is for
-        //    shortcut.WindowStyle = 1;
-        //    shortcut.Description = "my shortcut description";
-        //    shortcut.WorkingDirectory = "c:\\app";
-        //    shortcut.IconLocation = "specify icon location";
-        //    shortcut.Save();
-        //}
-
         private void buttonCreateShortcut_Click(object sender, EventArgs e)
         {
-            //try
-            //{
-            //    string executablePath = Application.ExecutablePath;
-            //    string desktopPath = Environment.GetFolderPath(Environment.SpecialFolder.Desktop);
-            //    string shortcutPath = Path.Combine(desktopPath, "Double Key Press Detector.lnk");
+            string executablePath = Application.ExecutablePath;
 
-            //    WshShell shell = new WshShell();
-            //    IWshShortcut shortcut = (IWshShortcut)shell.CreateShortcut(shortcutPath);
+            // Set the current settings as arguments
+            var args = new List<string>();
 
-            //    // Set the current settings as arguments
-            //    var args = new List<string>();
-            //    if (numericUpDownThreshold.Value != 100) // Only add if different from default
-            //    {
-            //        args.Add(AvailableArgs.Threshold.Arg);
-            //        args.Add(numericUpDownThreshold.Value.ToString());
-            //    }
-            //    if (!string.IsNullOrEmpty(textBoxSoundAlias.Text))
-            //    {
-            //        args.Add(AvailableArgs.SoundAlias.Arg);
-            //        args.Add($"\"{textBoxSoundAlias.Text}\"");
-            //    }
-            //    if (!string.IsNullOrEmpty(textBoxIgnore.Text))
-            //    {
-            //        args.Add(AvailableArgs.IgnoreKeys.Arg);
-            //        args.Add($"\"{textBoxIgnore.Text}\"");
-            //    }
+            // Threshold
+            if (numericUpDownThreshold.Value > 0)
+            {
+                args.Add(AvailableArgs.Threshold.Arg);
+                args.Add(numericUpDownThreshold.Value.ToString());
+            } 
+            else
+            {
+                MessageBox.Show("Warning: Invalid threshold value. Must be positive. Will use default.");
+            }
 
-            //    shortcut.Arguments = string.Join(" ", args);
-            //    shortcut.TargetPath = executablePath;
-            //    shortcut.WindowStyle = 1; // Normal window
-            //    shortcut.Description = "Double Key Press Detector Application";
-            //    shortcut.WorkingDirectory = Path.GetDirectoryName(executablePath) ?? "";
-            //    shortcut.IconLocation = executablePath + ",0"; // Use the first icon from the exe
-            //    shortcut.Save();
+            // Sound Alias
+            if (!string.IsNullOrEmpty(textBoxSoundAlias.Text))
+            {
+                args.Add(AvailableArgs.SoundAlias.Arg);
+                args.Add($"\"{textBoxSoundAlias.Text}\"");
+            }
 
-            //    MessageBox.Show("Shortcut created successfully on the desktop!", "Success",
-            //        MessageBoxButtons.OK, MessageBoxIcon.Information);
-            //}
-            //catch (COMException ex)
-            //{
-            //    MessageBox.Show($"Error creating shortcut: {ex.Message}", "Error",
-            //        MessageBoxButtons.OK, MessageBoxIcon.Error);
-            //}
-            //catch (Exception ex)
-            //{
-            //    MessageBox.Show($"Unexpected error: {ex.Message}", "Error",
-            //        MessageBoxButtons.OK, MessageBoxIcon.Error);
-            //}
+            // Ignored Keys
+            if (!string.IsNullOrEmpty(textBoxIgnore.Text))
+            {
+                List<int> validatedIgnoreKeys = ValidateAndSplitIgnoredKeysString(textBoxIgnore.Text);
+                string validatedIgnoreKeysString = string.Join(", ", validatedIgnoreKeys);
+
+                args.Add(AvailableArgs.IgnoreKeys.Arg);
+                args.Add($"\"{validatedIgnoreKeysString}\"");
+            }
+
+            // Minimized and start on launch (always added)
+            args.Add(AvailableArgs.Minimized.Arg);
+            args.Add(AvailableArgs.StartOnLaunch.Arg);
+
+            // Combine and copy to clipboard
+            string fullCommand = $"\"{executablePath}\" {string.Join(" ", args)}";
+            if (!string.IsNullOrEmpty(fullCommand))
+            {
+                Clipboard.SetText(fullCommand);
+                ShowCopyCheckForTime(300);
+            }
+        }
+
+        private async void ShowCopyCheckForTime(int milliseconds)
+        {
+            if (this.InvokeRequired)
+            {
+                BeginInvoke((Action)(() => ShowCopyCheckForTime(milliseconds)));
+                return;
+            }
+
+            labelCopyCheck.Visible = true;
+            await Task.Delay(milliseconds);
+            labelCopyCheck.Visible = false;
+        }
+
+        private void buttonCopyCommandHelp_Click(object sender, EventArgs e)
+        {
+            string message = "Copies a command to launch the app with the current active settings.\n\n" +
+                "You can then paste it as the target for a shortcut or some other script, for example.\n\n" +
+                "Tip: To make it start with windows, you can put the shortcut in: \n%APPDATA%\\Microsoft\\Windows\\Start Menu\\Programs\\Startup \n\n" +
+                "Note:  The \"-minimized\" and \"-start-on-launch\" args is always added. Just remove those if you don't want that.";
+
+
+
+            MessageBox.Show(message, "Sound Help", MessageBoxButtons.OK, MessageBoxIcon.None);
         }
     }
 }

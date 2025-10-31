@@ -35,9 +35,7 @@ namespace DoubleKeyPressDetector
         private static Label? WatcherActiveLabelReference = null; // Optional UI feedback
 
         // --- Double Press Detection Logic ---
-        private static int _lastVkCode = 0;
         private static readonly Stopwatch _stopwatch = new Stopwatch(); // For timing key presses
-        private static long _lastKeyPressTimestamp = 0;
         public static int DoublePressThresholdMs { get; set; } = 10; // Default threshold
         public static List<int> IgnoredVkCodes { get; } = new List<int>(); // List of VK codes to ignore>
 
@@ -70,8 +68,6 @@ namespace DoubleKeyPressDetector
                     if (value)
                     {
                         // Reset state when starting
-                        _lastVkCode = 0;
-                        _lastKeyPressTimestamp = 0;
                         _stopwatch.Restart(); // Start/Restart stopwatch when monitoring starts
                     }
                     else

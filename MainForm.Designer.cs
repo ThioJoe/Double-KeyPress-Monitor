@@ -44,6 +44,8 @@
             this.textBoxIgnore = new System.Windows.Forms.TextBox();
             this.buttonIgnoreHelp = new System.Windows.Forms.Button();
             this.buttonCreateShortcut = new System.Windows.Forms.Button();
+            this.buttonCopyCommandHelp = new System.Windows.Forms.Button();
+            this.labelCopyCheck = new System.Windows.Forms.Label();
             ((System.ComponentModel.ISupportInitialize)(this.numericUpDownThreshold)).BeginInit();
             this.SuspendLayout();
             // 
@@ -185,15 +187,15 @@
             this.labelIgnore.AutoSize = true;
             this.labelIgnore.Location = new System.Drawing.Point(16, 269);
             this.labelIgnore.Name = "labelIgnore";
-            this.labelIgnore.Size = new System.Drawing.Size(59, 20);
+            this.labelIgnore.Size = new System.Drawing.Size(98, 20);
             this.labelIgnore.TabIndex = 12;
-            this.labelIgnore.Text = "Ignore:";
+            this.labelIgnore.Text = "Ignored Key:";
             // 
             // textBoxIgnore
             // 
-            this.textBoxIgnore.Location = new System.Drawing.Point(77, 266);
+            this.textBoxIgnore.Location = new System.Drawing.Point(122, 266);
             this.textBoxIgnore.Name = "textBoxIgnore";
-            this.textBoxIgnore.Size = new System.Drawing.Size(239, 26);
+            this.textBoxIgnore.Size = new System.Drawing.Size(194, 26);
             this.textBoxIgnore.TabIndex = 13;
             // 
             // buttonIgnoreHelp
@@ -208,19 +210,43 @@
             // 
             // buttonCreateShortcut
             // 
-            this.buttonCreateShortcut.Location = new System.Drawing.Point(34, 309);
+            this.buttonCreateShortcut.Location = new System.Drawing.Point(77, 309);
             this.buttonCreateShortcut.Name = "buttonCreateShortcut";
-            this.buttonCreateShortcut.Size = new System.Drawing.Size(300, 34);
+            this.buttonCreateShortcut.Size = new System.Drawing.Size(199, 34);
             this.buttonCreateShortcut.TabIndex = 15;
-            this.buttonCreateShortcut.Text = "Create Shortcut With Current Settings";
+            this.buttonCreateShortcut.Text = "Copy Launch Command";
             this.buttonCreateShortcut.UseVisualStyleBackColor = true;
             this.buttonCreateShortcut.Click += new System.EventHandler(this.buttonCreateShortcut_Click);
+            // 
+            // buttonCopyCommandHelp
+            // 
+            this.buttonCopyCommandHelp.Location = new System.Drawing.Point(282, 307);
+            this.buttonCopyCommandHelp.Name = "buttonCopyCommandHelp";
+            this.buttonCopyCommandHelp.Size = new System.Drawing.Size(27, 36);
+            this.buttonCopyCommandHelp.TabIndex = 16;
+            this.buttonCopyCommandHelp.Text = "?";
+            this.buttonCopyCommandHelp.UseVisualStyleBackColor = true;
+            this.buttonCopyCommandHelp.Click += new System.EventHandler(this.buttonCopyCommandHelp_Click);
+            // 
+            // labelCopyCheck
+            // 
+            this.labelCopyCheck.AutoSize = true;
+            this.labelCopyCheck.Font = new System.Drawing.Font("Microsoft Sans Serif", 10F);
+            this.labelCopyCheck.ForeColor = System.Drawing.Color.SeaGreen;
+            this.labelCopyCheck.Location = new System.Drawing.Point(38, 312);
+            this.labelCopyCheck.Name = "labelCopyCheck";
+            this.labelCopyCheck.Size = new System.Drawing.Size(33, 25);
+            this.labelCopyCheck.TabIndex = 17;
+            this.labelCopyCheck.Text = "✔️";
+            this.labelCopyCheck.Visible = false;
             // 
             // MainForm
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(9F, 20F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(371, 355);
+            this.Controls.Add(this.labelCopyCheck);
+            this.Controls.Add(this.buttonCopyCommandHelp);
             this.Controls.Add(this.buttonCreateShortcut);
             this.Controls.Add(this.buttonIgnoreHelp);
             this.Controls.Add(this.textBoxIgnore);
@@ -267,6 +293,8 @@
         private System.Windows.Forms.TextBox textBoxIgnore;
         private System.Windows.Forms.Button buttonIgnoreHelp;
         private System.Windows.Forms.Button buttonCreateShortcut;
+        private System.Windows.Forms.Button buttonCopyCommandHelp;
+        private System.Windows.Forms.Label labelCopyCheck;
     }
 }
 
