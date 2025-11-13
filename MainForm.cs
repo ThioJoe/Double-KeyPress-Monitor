@@ -210,9 +210,16 @@ namespace DoubleKeyPressDetector
         // Event handler called by RawInputHandler when a double press occurs
         private void RawInputHandler_DoublePressDetected(object sender, DoublePressEventArgs e)
         {
-            // Call the logger
+            // Queue this entire operation to the thread pool to prevent blocking the raw input message loop
+            System.Threading.ThreadPool.QueueUserWorkItem(_ => ProcessDoublePressEvent(e));
+        }
+
+        private void ProcessDoublePressEvent(DoublePressEventArgs e)
+        {
+            // Call the logger (which already uses thread pool internally)
             DoubleKeyPressLogger.LogEvent(e.VirtualKeyCode, e.DelayMilliseconds, e.DevicePath, e.PreviousPressTimestamp, e.CurrentPressTimestamp);
-            // Play sound if specified
+            
+            // Play sound if specified (also on background thread now)
             if (checkBoxPlaySound.Checked == true)
             {
                 CustomSystemSounds.PlayCustomSoundFromTextbox(textBoxSoundAlias.Text);
