@@ -45,6 +45,7 @@ namespace DoubleKeyPressDetector
 
         // Arrays to store the last press timestamp and key state for each VK code
         private static readonly long[] _lastKeyTimestamps = new long[256];
+        private static readonly long[] _lastKeyUpTimestamps = new long[256]; // Track last key UP timestamp
         private static readonly bool[] _isKeyDown = new bool[256];
 
         // Delegate for the window procedure
@@ -93,6 +94,7 @@ namespace DoubleKeyPressDetector
 
             Array.Clear(_isKeyDown, 0, _isKeyDown.Length);
             Array.Clear(_lastKeyTimestamps, 0, _lastKeyTimestamps.Length);
+            Array.Clear(_lastKeyUpTimestamps, 0, _lastKeyUpTimestamps.Length); // Clear last key up timestamps
             WatcherActiveLabelReference = labelToUpdate;
             targetWindowHandle = hwnd; // Store handle
             DoublePressThresholdMs = thresholdMs; // Set threshold
@@ -153,6 +155,7 @@ namespace DoubleKeyPressDetector
             RegisterRawInputDevices(rid, 1, (uint)Marshal.SizeOf<WinEnums.RAWINPUTDEVICE>());
             Array.Clear(_isKeyDown, 0, _isKeyDown.Length);
             Array.Clear(_lastKeyTimestamps, 0, _lastKeyTimestamps.Length);
+            Array.Clear(_lastKeyUpTimestamps, 0, _lastKeyUpTimestamps.Length); // Clear last key up timestamps
 
             // Unsubclass the window IF it was originally subclassed by this instance
             if (originalWndProc != IntPtr.Zero && targetWindowHandle != IntPtr.Zero)
@@ -234,9 +237,9 @@ namespace DoubleKeyPressDetector
                                     {
                                         _isKeyDown[currentVkCode] = true;
 
-                                        // Don't bother checking if lastPressTimestamp is negative
-                                        long lastPressTimestamp = _lastKeyTimestamps[currentVkCode];
-                                        long delay = currentTimestamp - lastPressTimestamp;
+                                        // Calculate delay from last key UP (not key DOWN)
+                                        long lastKeyUpTimestamp = _lastKeyUpTimestamps[currentVkCode];
+                                        long delay = currentTimestamp - lastKeyUpTimestamp;
 
                                         if (delay <= DoublePressThresholdMs)
                                         {
@@ -248,7 +251,7 @@ namespace DoubleKeyPressDetector
                                             DoublePressDetected?.Invoke(null, new DoublePressEventArgs(
                                                 vkCode: currentVkCode,
                                                 delay: delay,
-                                                previousPressTimestamp: lastPressTimestamp,
+                                                previousPressTimestamp: lastKeyUpTimestamp,
                                                 currentPressTimestamp: currentTimestamp,
                                                 handleStrng: deviceHandleStr,
                                                 devicePath: deviceName
@@ -259,6 +262,8 @@ namespace DoubleKeyPressDetector
                                 }
                                 else // Key Up
                                 {
+                                    // Update the last key up timestamp
+                                    _lastKeyUpTimestamps[currentVkCode] = currentTimestamp;
                                     _isKeyDown[currentVkCode] = false;
                                 }
                             }
