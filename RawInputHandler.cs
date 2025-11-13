@@ -41,8 +41,11 @@ namespace DoubleKeyPressDetector
 
         // Event to signal a double press was detected
         public static event EventHandler<DoublePressEventArgs>? DoublePressDetected;
+        // Array for last keypress timestamps. The VK Codes themselves can act as indexes in the array.
+        private static readonly long[] _lastKeyTimestampsArray = new long[256];
+
         // Dictionary to store the last press timestamp for each VK code
-        private static readonly Dictionary<int, long> _lastKeyTimestamps = new Dictionary<int, long>();
+        //private static readonly Dictionary<int, long> _lastKeyTimestamps = new Dictionary<int, long>();
 
         // Delegate for the window procedure
         private delegate IntPtr WndProcDelegate(IntPtr hwnd, WinEnums.WM_MESSAGE msg, UIntPtr wParam, IntPtr lParam);
@@ -69,6 +72,13 @@ namespace DoubleKeyPressDetector
                     {
                         // Reset state when starting
                         _stopwatch.Restart(); // Start/Restart stopwatch when monitoring starts
+
+                        // Fill the last keypress array with curren time so they all have initial values
+                        long initialTimestamp = _stopwatch.ElapsedMilliseconds;
+                        for (int i = 0; i < _lastKeyTimestampsArray.Length; i++)
+                        {
+                            _lastKeyTimestampsArray[i] = initialTimestamp;
+                        }
                     }
                     else
                     {
@@ -228,48 +238,34 @@ namespace DoubleKeyPressDetector
                             // Do the check for ignored keys here after we checked the timer to avoid adding delay if we end up needing it
                             if (!IgnoredVkCodes.Contains(currentVkCode))
                             {
-                                // ---- Double Press Check using Dictionary ----
-                                // Do the check for ignored keys here after the timestamp
-                                if (_lastKeyTimestamps.TryGetValue(currentVkCode, out long lastPressTimestamp))
+                                long lastPressTimestamp = _lastKeyTimestampsArray[currentVkCode];
+
+                                // Check timing
+                                long delay = currentTimestamp - lastPressTimestamp;
+                                if (delay > 0 && delay <= DoublePressThresholdMs) // Ensure delay is positive (handles potential timer wraps or edge cases)
                                 {
-                                    // Key found in dictionary, check timing
-                                    long delay = currentTimestamp - lastPressTimestamp;
-                                    if (delay > 0 && delay <= DoublePressThresholdMs) // Ensure delay is positive (handles potential timer wraps or edge cases)
-                                    {
-                                        // Get info about the device through the hdevice handle in raw.header
-                                        IntPtr hDevice = raw.header.hDevice;
-                                        string deviceHandleStr = hDevice.ToInt64().ToString("X16");
-                                        DeviceDetailsHelper.RID_DEVICE_INFO? info = DeviceDetailsHelper.GetDeviceInfo(hDevice);
-                                        string? deviceName = DeviceDetailsHelper.GetDeviceName(hDevice);
+                                    // Get info about the device through the hdevice handle in raw.header
+                                    IntPtr hDevice = raw.header.hDevice;
+                                    string deviceHandleStr = hDevice.ToInt64().ToString("X16");
+                                    DeviceDetailsHelper.RID_DEVICE_INFO? info = DeviceDetailsHelper.GetDeviceInfo(hDevice) ?? new DeviceDetailsHelper.RID_DEVICE_INFO();
+                                    string? deviceName = DeviceDetailsHelper.GetDeviceName(hDevice) ?? "Unknown";
 
-                                        if (deviceName == null)
-                                        {
-                                            deviceName = "Unknown";
-                                        }
+                                    // Double press detected! Raise the event.
+                                    DoublePressDetected?.Invoke(null, new DoublePressEventArgs(
+                                        vkCode: currentVkCode,
+                                        delay: delay,
+                                        previousPressTimestamp: lastPressTimestamp,
+                                        currentPressTimestamp: currentTimestamp,
+                                        handleStrng: deviceHandleStr,
+                                        devicePath: deviceName
+                                    ));
 
-                                        if (info == null)
-                                        {
-                                            info = new DeviceDetailsHelper.RID_DEVICE_INFO();
-                                        }
-
-                                        // Double press detected! Raise the event.
-                                        DoublePressDetected?.Invoke(null, new DoublePressEventArgs(
-                                            vkCode: currentVkCode,
-                                            delay: delay,
-                                            previousPressTimestamp: lastPressTimestamp,
-                                            currentPressTimestamp: currentTimestamp,
-                                            handleStrng: deviceHandleStr,
-                                            devicePath: deviceName
-                                        ));
-
-                                        // Console.WriteLine($"Double Press: VK={currentVkCode:X2}, Delay={delay}ms"); // Debug output
-                                    }
-
-                                    // Update the dictionary with the current timestamp for this key
-                                    // This happens regardless of whether a double press was detected
-                                    _lastKeyTimestamps[currentVkCode] = currentTimestamp;
+                                    // Console.WriteLine($"Double Press: VK={currentVkCode:X2}, Delay={delay}ms"); // Debug output
                                 }
-                                // ---- End Check ----
+
+                                // Regardless of whether it was a double press,  Update the array with the current timestamp for this key
+                                // This happens regardless of whether a double press was detected
+                                _lastKeyTimestampsArray[currentVkCode] = currentTimestamp;
 
                                 //PrintKeyInfo(raw.keyboard);
 
