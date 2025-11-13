@@ -264,12 +264,12 @@ namespace DoubleKeyPressDetector
 
                                         // Console.WriteLine($"Double Press: VK={currentVkCode:X2}, Delay={delay}ms"); // Debug output
                                     }
+
+                                    // Update the dictionary with the current timestamp for this key
+                                    // This happens regardless of whether a double press was detected
+                                    _lastKeyTimestamps[currentVkCode] = currentTimestamp;
                                 }
                                 // ---- End Check ----
-
-                                // Update the dictionary with the current timestamp for this key
-                                // This happens regardless of whether a double press was detected
-                                _lastKeyTimestamps[currentVkCode] = currentTimestamp;
 
                                 //PrintKeyInfo(raw.keyboard);
 
