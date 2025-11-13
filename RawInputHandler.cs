@@ -220,45 +220,41 @@ namespace DoubleKeyPressDetector
                     {
                         RAWINPUT raw = Marshal.PtrToStructure<RAWINPUT>(buffer);
 
-                        if (raw.header.dwType == RAWINPUTHEADER._dwType.RIM_TYPEKEYBOARD && raw.header.hDevice != IntPtr.Zero)
+                        if (raw.header.dwType == RAWINPUTHEADER._dwType.RIM_TYPEKEYBOARD
+                            && raw.header.hDevice != IntPtr.Zero // Ignore artificial key semds like from SendInput
+                            )
                         {
                             int currentVkCode = raw.keyboard.VKey;
-                            if (currentVkCode < 256)
+                            if (currentVkCode < 256 && !IgnoredVkCodes.Contains(currentVkCode))
                             {
-                                bool isKeyDown = (raw.keyboard.Flags & RAWKEYBOARD._Flags.RI_KEY_BREAK) == 0;
-
-                                if (isKeyDown)
+                                if (!raw.keyboard.Flags.HasFlag(RAWKEYBOARD._Flags.RI_KEY_BREAK)) // If it's key down
                                 {
+                                    // If it's not already down, aka not a held key repeat
                                     if (!_isKeyDown[currentVkCode])
                                     {
-                                        // This is a new key down event, not a repeat
                                         _isKeyDown[currentVkCode] = true;
 
-                                        if (!IgnoredVkCodes.Contains(currentVkCode))
-                                        {
-                                            long lastPressTimestamp = _lastKeyTimestamps[currentVkCode];
-                                            if (lastPressTimestamp > 0)
-                                            {
-                                                long delay = currentTimestamp - lastPressTimestamp;
-                                                if (delay > 0 && delay <= DoublePressThresholdMs)
-                                                {
-                                                    IntPtr hDevice = raw.header.hDevice;
-                                                    string deviceHandleStr = hDevice.ToInt64().ToString("X16");
-                                                    DeviceDetailsHelper.RID_DEVICE_INFO? info = DeviceDetailsHelper.GetDeviceInfo(hDevice) ?? new DeviceDetailsHelper.RID_DEVICE_INFO();
-                                                    string? deviceName = DeviceDetailsHelper.GetDeviceName(hDevice) ?? "Unknown";
+                                        // Don't bother checking if lastPressTimestamp is negative
+                                        long lastPressTimestamp = _lastKeyTimestamps[currentVkCode];
+                                        long delay = currentTimestamp - lastPressTimestamp;
 
-                                                    DoublePressDetected?.Invoke(null, new DoublePressEventArgs(
-                                                        vkCode: currentVkCode,
-                                                        delay: delay,
-                                                        previousPressTimestamp: lastPressTimestamp,
-                                                        currentPressTimestamp: currentTimestamp,
-                                                        handleStrng: deviceHandleStr,
-                                                        devicePath: deviceName
-                                                    ));
-                                                }
-                                            }
-                                            _lastKeyTimestamps[currentVkCode] = currentTimestamp;
+                                        if (delay <= DoublePressThresholdMs)
+                                        {
+                                            IntPtr hDevice = raw.header.hDevice;
+                                            string deviceHandleStr = hDevice.ToInt64().ToString("X16");
+                                            DeviceDetailsHelper.RID_DEVICE_INFO? info = DeviceDetailsHelper.GetDeviceInfo(hDevice) ?? new DeviceDetailsHelper.RID_DEVICE_INFO();
+                                            string? deviceName = DeviceDetailsHelper.GetDeviceName(hDevice) ?? "Unknown";
+
+                                            DoublePressDetected?.Invoke(null, new DoublePressEventArgs(
+                                                vkCode: currentVkCode,
+                                                delay: delay,
+                                                previousPressTimestamp: lastPressTimestamp,
+                                                currentPressTimestamp: currentTimestamp,
+                                                handleStrng: deviceHandleStr,
+                                                devicePath: deviceName
+                                            ));
                                         }
+                                        _lastKeyTimestamps[currentVkCode] = currentTimestamp;
                                     }
                                 }
                                 else // Key Up
