@@ -15,16 +15,19 @@ A Windows application that globally monitors keyboard input to detect and log un
 - Button to generate a command to launch the app with current settings
 
 ## Download and Installation
-- Navigate to the repository Releases page.
-- Download the latest compiled executable.
-- Run the executable directly. No installation is required.
+- Navigate to the repository [Releases](https://github.com/ThioJoe/Double-KeyPress-Monitor/releases) page.
+- Under the "Assets" section of the latest release, download `Double-KeyPress-Monitor.exe`
+- Run the exe. No installation is required.
 
 ## Usage
-1. Launch the application.
-2. Define the threshold (ms). Set this value just below the fastest delay you can intentionally produce when pressing a key rapidly.
-3. Enter Virtual Key (VK) codes to ignore as a comma-separated list (e.g., `46, 8` for Delete and Backspace). Hexadecimal formats (e.g., `0x2E`) are also supported.
-4. Provide a sound alias or absolute/relative file path to play an alert on detection. Leave blank to default to the Windows 'Speech Misrecognition' sound.
-5. Click "Start Monitoring".
+* Define the threshold (ms).
+   *   Set this value just below the fastest delay you can intentionally produce when pressing a key rapidly.
+* Enter Virtual Key (VK) codes to ignore as a comma-separated list
+  * For example: `46, 8` for Delete and Backspace.
+  * Hexadecimal formats (Such as `0x2E`) are also supported.
+* Provide a sound alias or absolute/relative file path to play an alert on detection.
+  * Leave blank to default to the Windows 'Speech Misrecognition' sound.
+* Click "Start Monitoring" to begin monitoring and "Stop Monitoring" to stop.
 
 ## Command Line Arguments
 These arguments determine how the app launches:
