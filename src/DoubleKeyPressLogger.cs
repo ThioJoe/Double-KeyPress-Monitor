@@ -73,7 +73,10 @@ namespace DoubleKeyPressDetector
                 logLine.Append($"VirtualKeyCode: {logEntry.VirtualKeyCode}\t\t");
                 logLine.Append($"Timestamp: {formattedTime}\t\t");
                 logLine.Append($"DevicePath: {logEntry.DevicePath}\t\t");
-                logLine.Append($"Previous/Current Timer Ms: {logEntry.PreviousPressTimerMilliseconds} | {logEntry.CurrentPressTimerMilliseconds}");
+
+                #if DEBUG
+                    logLine.Append($"Previous/Current Timer Ms: {logEntry.PreviousPressTimerMilliseconds} | {logEntry.CurrentPressTimerMilliseconds}");
+                #endif
 
                 // Use lock for thread-safe file access
                 lock (_lock)
