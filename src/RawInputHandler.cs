@@ -19,6 +19,7 @@ namespace DoubleKeyPressDetector
         [DllImport("user32.dll")]
         private static extern uint GetRawInputData(IntPtr hRawInput, uint uiCommand, IntPtr pData, ref uint pcbSize, uint cbSizeHeader);
 
+        // Note: This won't work on 32 bit versions of windows.
         [DllImport("user32.dll", EntryPoint = "SetWindowLongPtr", SetLastError = true)]
         private static extern IntPtr SetWindowLongPtr(IntPtr hWnd, int nIndex, IntPtr dwNewLong);
 
