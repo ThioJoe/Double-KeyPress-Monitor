@@ -46,6 +46,17 @@ namespace DoubleKeyPressDetector
             };
         }
 
+        // Get the app version number from the assembly details
+        public string AppVersion
+        {
+            get
+            {
+                var version = System.Reflection.Assembly.GetExecutingAssembly().GetName().Version;
+                return version != null ? version.ToString() : "";
+            }
+        }
+
+
         // -----------------------------------------------------------------------------
 
         public MainForm(string[] args)
@@ -54,8 +65,12 @@ namespace DoubleKeyPressDetector
             // Initial UI state
             buttonStop.Enabled = false;
             labelStatus.ForeColor = Color.Red;
-            this.Text = "Double Key Press Detector"; // Set form title
             bool startNow = false;
+
+            // Set form title
+            string titleText = $"Double Key Press Detector";
+            if (AppVersion != "") { titleText += $" - {AppVersion}"; };
+            this.Text = titleText; 
 
             // Optional: Load settings from command line arguments
             // Supported arguments: -threshold -minimized -start-on-launch
