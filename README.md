@@ -14,19 +14,36 @@ This tool can be useful for:
 - Understanding the severity of the problem in general (the frequency of double keypresses)
 - Providing evidence for keyboard warranty replacements due to key chatter.
 
+### How to Download & Use
+- On the [Releases](https://github.com/ThioJoe/Double-KeyPress-Monitor/releases) page, look in the "Assets" section of the latest release, and download `Double-KeyPress-Monitor.exe`
+- Run the exe (no installation is required).
+- Click "Start Monitoring", and any double keypresses will be stored in a log file next to the exe.
+
 ## Features
 - Configurable delay threshold in milliseconds
 - Optional ignore list for specific keys
 - Customizeable audio indication on detection
-- Detected events logged to local `double_press_log.log` file
+- Detected double-keypress logged to local `double_press_log.log` file
 - Button to generate a command to launch the app with current settings
 
-## Download and Installation
-- Navigate to the repository [Releases](https://github.com/ThioJoe/Double-KeyPress-Monitor/releases) page.
-- Under the "Assets" section of the latest release, download `Double-KeyPress-Monitor.exe`
-- Run the exe. No installation is required.
+## How it Works
+- Uses the Windows [Raw Input](https://learn.microsoft.com/en-us/windows/win32/inputdev/about-raw-input) API to receive keystrokes without needing to use a keyboard hook
+  - Basically keyboard hooks are "read/write" and can modify or block inputs and can add latency, whereas RawInput is "read only".
 
-## Usage
+1. The app keeps an array in memory of the most recent exact time each key was last pressed (down to the millisecond)
+2. When any keystroke is made, it compares the current time to when it was last pressed, and updates the most recent time for that key
+   - Note: It does NOT keep history of all keypresses, only a single most recent timer value for each key
+3. If the difference between the previous time and current time is less than the user-configured threshold, it adds info about that keypress to the log file.
+
+Example `double_press.log`:
+
+```
+KeyName: F			TimeDelayMilliseconds: 41		VirtualKeyCode: 70		Timestamp: 2026-04-19 02:32:02.651 PM		DevicePath: \\?\HID#VID_31E3&PID_1232&MI_01
+KeyName: B			TimeDelayMilliseconds: 41		VirtualKeyCode: 66		Timestamp: 2026-04-19 02:32:17.023 PM		DevicePath: \\?\HID#VID_31E3&PID_1232&MI_01
+KeyName: NumPad5	TimeDelayMilliseconds: 33		VirtualKeyCode: 101		Timestamp: 2026-04-19 02:32:38.515 PM		DevicePath: \\?\HID#VID_31E3&PID_1232&MI_01
+```
+
+## Options
 * Define the threshold (ms).
    *   Set this value just below the fastest delay you can intentionally produce when pressing a key rapidly.
 * Enter Virtual Key (VK) codes to ignore as a comma-separated list
@@ -46,7 +63,7 @@ These arguments change initial settings that are also configurable in the GUI:
 - `-sound-alias "<alias_or_path>"`: Specify a custom system sound alias or file path to play when a double keypress is detected.
 - `-ignore-keys "<vk_codes>"`: Specify a comma-separated list of virtual key codes to ignore.
 
-## Compilation
+## How to Compile Yourself
 1. Open `Monitor-Double-Keypresses.sln` using Visual Studio 2022 or 2026.
 2. Uses .NET Framework 4.8, no third party packages required.
 4. Build the solution (`Build > Build Solution`) as either Release or Debug.
