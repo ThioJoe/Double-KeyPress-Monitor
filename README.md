@@ -1,11 +1,18 @@
 # Double Key Press Monitor
 
-A Windows application that globally monitors keyboard input to detect and log unintended double keyboard keypresses (key chattering).
+A Windows application that detects and logs unintended double keypresses from your keyboard, which is sometimes a problem for mechanical keyboards.
 
+➤ **Note:** This tool is designed to quantify known or suspected key chatter. If you haven't noticed any annoying double-typing in your daily use, this app won't reveal any hidden issues.
 
 <p align="center">
 <img width="350" alt="Double Key Press Detector" src="https://github.com/user-attachments/assets/358059fb-f2b0-4efb-abfc-6a7cb58f1b77" />
 </p>
+
+## **Why?** 
+This tool can be useful for:
+- Determining which are the most problematic keys
+- Understanding the severity of the problem in general (the frequency of double keypresses)
+- Providing evidence for keyboard warranty replacements due to key chatter.
 
 ## Features
 - Configurable delay threshold in milliseconds
