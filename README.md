@@ -23,8 +23,10 @@ This tool can be useful for:
 - Configurable delay threshold in milliseconds
 - Optional ignore list for specific keys
 - Customizable audio indication on detection
+- Button to generate a command to launch the app with current settings (Useful to create a shortcut to launch with your settings)
+- Button to "Remove Last Log Entry", such as if you hear it log a double keypress that was actually intentional
 - Detected double-keypresses are logged to local `double_press_log.log` file
-- Button to generate a command to launch the app with current settings
+
 
 ## How it Works
 - Uses the Windows [Raw Input](https://learn.microsoft.com/en-us/windows/win32/inputdev/about-raw-input) API to receive keystrokes without needing to use a keyboard hook
