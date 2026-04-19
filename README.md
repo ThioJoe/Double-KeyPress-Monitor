@@ -22,8 +22,8 @@ This tool can be useful for:
 ## Features
 - Configurable delay threshold in milliseconds
 - Optional ignore list for specific keys
-- Customizeable audio indication on detection
-- Detected double-keypress logged to local `double_press_log.log` file
+- Customizable audio indication on detection
+- Detected double-keypresses are logged to local `double_press_log.log` file
 - Button to generate a command to launch the app with current settings
 
 ## How it Works
@@ -35,7 +35,7 @@ This tool can be useful for:
    - Note: It does NOT keep history of all keypresses, only a single most recent timer value for each key
 3. If the difference between the previous time and current time is less than the user-configured threshold, it adds info about that keypress to the log file.
 
-### **Example `double_press.log`:**
+### **Example `double_press_log.log`:**
 
 ```
 KeyName: F			TimeDelayMilliseconds: 41		VirtualKeyCode: 70		Timestamp: 2026-04-19 02:32:02.651 PM		DevicePath: \\?\HID#VID_31E3&PID_1232&MI_01
@@ -66,4 +66,4 @@ These arguments change initial settings that are also configurable in the GUI:
 ## How to Compile Yourself
 1. Open `Monitor-Double-Keypresses.sln` using Visual Studio 2022 or 2026.
 2. Uses .NET Framework 4.8, no third party packages required.
-4. Build the solution (`Build > Build Solution`) as either Release or Debug.
+3. Build the solution (`Build > Build Solution`) as either Release or Debug.
