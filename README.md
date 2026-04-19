@@ -35,7 +35,7 @@ This tool can be useful for:
    - Note: It does NOT keep history of all keypresses, only a single most recent timer value for each key
 3. If the difference between the previous time and current time is less than the user-configured threshold, it adds info about that keypress to the log file.
 
-Example `double_press.log`:
+### **Example `double_press.log`:**
 
 ```
 KeyName: F			TimeDelayMilliseconds: 41		VirtualKeyCode: 70		Timestamp: 2026-04-19 02:32:02.651 PM		DevicePath: \\?\HID#VID_31E3&PID_1232&MI_01
