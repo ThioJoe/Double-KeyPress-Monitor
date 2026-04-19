@@ -68,7 +68,7 @@ namespace DoubleKeyPressDetector
             bool startNow = false;
 
             // Set form title
-            string titleText = $"Double Key Press Detector";
+            string titleText = $"Double Key Press Monitor";
             if (AppVersion != "") { titleText += $" - {AppVersion}"; };
             this.Text = titleText; 
 

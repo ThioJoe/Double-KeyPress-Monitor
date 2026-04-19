@@ -4,11 +4,11 @@ using System.Runtime.InteropServices;
 // General Information about an assembly is controlled through the following
 // set of attributes. Change these attribute values to modify the information
 // associated with an assembly.
-[assembly: AssemblyTitle("Monitor-Double-Keypresses")]
+[assembly: AssemblyTitle("Double KeyPress Monitor")]
 [assembly: AssemblyDescription("")]
 [assembly: AssemblyConfiguration("")]
 [assembly: AssemblyCompany("")]
-[assembly: AssemblyProduct("Monitor-Double-Keypresses")]
+[assembly: AssemblyProduct("Github.com/ThioJoe/Double-KeyPress-Monitor")]
 [assembly: AssemblyCopyright("Copyright © ThioJoe 2026")]
 [assembly: AssemblyTrademark("")]
 [assembly: AssemblyCulture("")]
