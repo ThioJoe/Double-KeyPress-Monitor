@@ -30,10 +30,11 @@ This tool can be useful for:
 - Uses the Windows [Raw Input](https://learn.microsoft.com/en-us/windows/win32/inputdev/about-raw-input) API to receive keystrokes without needing to use a keyboard hook
   - Basically keyboard hooks are "read/write" and can modify or block inputs and can add latency, whereas RawInput is "read only".
 
-1. The app keeps an array in memory of the most recent exact time each key was last pressed (down to the millisecond)
-2. When any keystroke is made, it compares the current time to when it was last pressed, and updates the most recent time for that key
-   - Note: It does NOT keep history of all keypresses, only a single most recent timer value for each key
-3. If the difference between the previous time and current time is less than the user-configured threshold, it adds info about that keypress to the log file.
+1. The app keeps an array in memory of the most recent exact time each key was last pressed
+2. When any keystroke is pressed, it compares the current time to when it was last pressed, and updates the most recent time for that key.
+    - Note: It does NOT keep history of all keypresses, only a single most recent timer value for each key
+4. If the difference between the previous time and current time is less than the user-configured threshold, it appends the data to the log.
+   - Note: Technically, the app actually compares the latest key down (press) time to the previous key up (release) time. This is more reliable for detecting key chatter, because it doesn't matter how long the key was held down.
 
 ### **Example `double_press_log.log`:**
 
