@@ -28,8 +28,7 @@ public static class CustomSystemSounds
         // Sometimes you might need SND_ALIAS_ID if the alias is predefined numerically, but for event names, SND_ALIAS is standard.
         // Let's try the most common combination first: Alias + Async + NoDefault
         fdwSound playSoundFlags =
-            fdwSound.SND_ALIAS         // Treat pszSound as an alias
-            | fdwSound.SND_APPLICATION // Specify that it's an APPLICATION-SPECIFIC alias
+            fdwSound.SND_APPLICATION // Specify that it's an APPLICATION-SPECIFIC alias
             | fdwSound.SND_ASYNC       // Play asynchronously
             | fdwSound.SND_SYSTEM    // Treat as a system sound (respects system volume etc.)
             | fdwSound.SND_NODEFAULT   // Silence if the sound alias is not found
@@ -40,7 +39,7 @@ public static class CustomSystemSounds
         const string SOUND_MISRECOGNITION_PATH = "C:\\Windows\\Media\\Speech Misrecognition.wav";
 
         // Trim quotes if present and trim whitespace
-        inputSound.Trim().Trim('"');
+        inputSound = inputSound.Trim().Trim('"');
 
         // First detect if it's a file path that exists
         if (Path.HasExtension(inputSound) && File.Exists(inputSound))
@@ -67,7 +66,7 @@ public static class CustomSystemSounds
         // Otherwise we'll assume it's an alias name
         else
         {
-            // Do nothing, we assume it's an alias and let PlaySound handle it
+            playSoundFlags = playSoundFlags | fdwSound.SND_ALIAS;
         }
 
 
