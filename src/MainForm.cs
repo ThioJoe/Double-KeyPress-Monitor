@@ -294,7 +294,8 @@ namespace DoubleKeyPressDetector
                 "- Just a File Name: (It will look in C:\\Windows\\Media)\n" +
                 "- Relative path to a sound file (Relative to C:\\Windows\\Media)\n" +
                 "- The \"Alias\" of the sound, a list of which can be found in the registry at: HKEY_CURRENT_USER\\AppEvents\\Schemes\\Apps\\.Default\n\n" +
-                "If you leave this blank, the 'Speech Misrecognition' system sound will be played.";
+                "If you leave this blank, the 'Speech Misrecognition' system sound will be played." +
+                "\n\nNote: Sound files must be .wav files, but even certain codecs/formats of wav might not work.";
 
             MessageBox.Show(message, "Sound Help", MessageBoxButtons.OK, MessageBoxIcon.None);
         }
@@ -415,6 +416,29 @@ namespace DoubleKeyPressDetector
                 "And it is still able to detect if an erroneous second 'A' keystroke occurs after the 'B' keystroke for example.\n\n";
 
             MessageBox.Show(message, "Threshold Tips", MessageBoxButtons.OK, MessageBoxIcon.None);
+        }
+
+        private void buttonSoundFileSelect_Click(object sender, EventArgs e)
+        {
+            string chosenFilePath = "";
+            using (OpenFileDialog openFileDialog = new OpenFileDialog())
+            {
+                string defaultDir = @"C:\Windows\Media";
+                openFileDialog.Title = "Select a Sound File";
+                openFileDialog.Filter = "Waveform Audio (*.wav)|*.wav|All Files (*.*)|*.*";
+                openFileDialog.FilterIndex = 1;
+
+                if (Directory.Exists(defaultDir))
+                    openFileDialog.InitialDirectory = defaultDir;
+
+                if (openFileDialog.ShowDialog(this) == DialogResult.OK)
+                    chosenFilePath = openFileDialog.FileName;
+            }
+
+            if (!String.IsNullOrWhiteSpace(chosenFilePath))
+            {
+                textBoxSoundAlias.Text = chosenFilePath;
+            }
         }
     }
 }

@@ -28,6 +28,7 @@
         /// </summary>
         private void InitializeComponent()
         {
+            this.components = new System.ComponentModel.Container();
             System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(MainForm));
             this.buttonStart = new System.Windows.Forms.Button();
             this.buttonStop = new System.Windows.Forms.Button();
@@ -58,6 +59,9 @@
             this.tableLayoutPanel4 = new System.Windows.Forms.TableLayoutPanel();
             this.tableLayoutPanel6 = new System.Windows.Forms.TableLayoutPanel();
             this.tableLayoutPanel5 = new System.Windows.Forms.TableLayoutPanel();
+            this.buttonSoundFileSelect = new System.Windows.Forms.Button();
+            this.flowLayoutPanel1 = new System.Windows.Forms.FlowLayoutPanel();
+            this.toolTip1 = new System.Windows.Forms.ToolTip(this.components);
             ((System.ComponentModel.ISupportInitialize)(this.numericUpDownThreshold)).BeginInit();
             this.tableLayoutPanel1.SuspendLayout();
             this.tableLayoutPanel2.SuspendLayout();
@@ -66,6 +70,7 @@
             this.tableLayoutPanel4.SuspendLayout();
             this.tableLayoutPanel6.SuspendLayout();
             this.tableLayoutPanel5.SuspendLayout();
+            this.flowLayoutPanel1.SuspendLayout();
             this.SuspendLayout();
             // 
             // buttonStart
@@ -95,7 +100,7 @@
             // numericUpDownThreshold
             // 
             this.numericUpDownThreshold.Anchor = System.Windows.Forms.AnchorStyles.Right;
-            this.numericUpDownThreshold.Location = new System.Drawing.Point(122, 9);
+            this.numericUpDownThreshold.Location = new System.Drawing.Point(130, 9);
             this.numericUpDownThreshold.Margin = new System.Windows.Forms.Padding(0);
             this.numericUpDownThreshold.Maximum = new decimal(new int[] {
             1000,
@@ -108,7 +113,7 @@
             0,
             0});
             this.numericUpDownThreshold.Name = "numericUpDownThreshold";
-            this.numericUpDownThreshold.Size = new System.Drawing.Size(79, 26);
+            this.numericUpDownThreshold.Size = new System.Drawing.Size(70, 26);
             this.numericUpDownThreshold.TabIndex = 2;
             this.numericUpDownThreshold.Value = new decimal(new int[] {
             50,
@@ -120,9 +125,9 @@
             // 
             this.labelThreshold.Anchor = System.Windows.Forms.AnchorStyles.Left;
             this.labelThreshold.AutoSize = true;
-            this.labelThreshold.Location = new System.Drawing.Point(3, 2);
+            this.labelThreshold.Location = new System.Drawing.Point(3, 12);
             this.labelThreshold.Name = "labelThreshold";
-            this.labelThreshold.Size = new System.Drawing.Size(83, 40);
+            this.labelThreshold.Size = new System.Drawing.Size(118, 20);
             this.labelThreshold.TabIndex = 3;
             this.labelThreshold.Text = "Threshold (ms):";
             // 
@@ -167,7 +172,7 @@
             this.textBoxSoundAlias.Dock = System.Windows.Forms.DockStyle.Fill;
             this.textBoxSoundAlias.Location = new System.Drawing.Point(158, 3);
             this.textBoxSoundAlias.Name = "textBoxSoundAlias";
-            this.textBoxSoundAlias.Size = new System.Drawing.Size(180, 26);
+            this.textBoxSoundAlias.Size = new System.Drawing.Size(133, 26);
             this.textBoxSoundAlias.TabIndex = 7;
             // 
             // labelSoundAlias
@@ -195,7 +200,8 @@
             // buttonSoundHelp
             // 
             this.buttonSoundHelp.Anchor = System.Windows.Forms.AnchorStyles.Left;
-            this.buttonSoundHelp.Location = new System.Drawing.Point(344, 3);
+            this.buttonSoundHelp.Location = new System.Drawing.Point(3, 3);
+            this.buttonSoundHelp.Margin = new System.Windows.Forms.Padding(3, 3, 0, 3);
             this.buttonSoundHelp.Name = "buttonSoundHelp";
             this.buttonSoundHelp.Size = new System.Drawing.Size(27, 32);
             this.buttonSoundHelp.TabIndex = 11;
@@ -219,13 +225,13 @@
             this.textBoxIgnore.Dock = System.Windows.Forms.DockStyle.Fill;
             this.textBoxIgnore.Location = new System.Drawing.Point(158, 41);
             this.textBoxIgnore.Name = "textBoxIgnore";
-            this.textBoxIgnore.Size = new System.Drawing.Size(180, 26);
+            this.textBoxIgnore.Size = new System.Drawing.Size(133, 26);
             this.textBoxIgnore.TabIndex = 13;
             // 
             // buttonIgnoreHelp
             // 
             this.buttonIgnoreHelp.Anchor = System.Windows.Forms.AnchorStyles.Left;
-            this.buttonIgnoreHelp.Location = new System.Drawing.Point(344, 41);
+            this.buttonIgnoreHelp.Location = new System.Drawing.Point(297, 41);
             this.buttonIgnoreHelp.Name = "buttonIgnoreHelp";
             this.buttonIgnoreHelp.Size = new System.Drawing.Size(27, 32);
             this.buttonIgnoreHelp.TabIndex = 14;
@@ -346,9 +352,9 @@
             // 
             this.tableLayoutPanel2.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom)));
             this.tableLayoutPanel2.ColumnCount = 3;
-            this.tableLayoutPanel2.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 60.78431F));
-            this.tableLayoutPanel2.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 39.21569F));
-            this.tableLayoutPanel2.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Absolute, 48F));
+            this.tableLayoutPanel2.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 65F));
+            this.tableLayoutPanel2.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 35F));
+            this.tableLayoutPanel2.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Absolute, 49F));
             this.tableLayoutPanel2.Controls.Add(this.buttonThresholdHelp, 2, 0);
             this.tableLayoutPanel2.Controls.Add(this.labelThreshold, 0, 0);
             this.tableLayoutPanel2.Controls.Add(this.numericUpDownThreshold, 1, 0);
@@ -393,11 +399,12 @@
             this.flowLayoutPanel2.Anchor = System.Windows.Forms.AnchorStyles.None;
             this.flowLayoutPanel2.Controls.Add(this.checkBoxPlaySound);
             this.flowLayoutPanel2.Controls.Add(this.buttonPreviewSound);
-            this.flowLayoutPanel2.Location = new System.Drawing.Point(36, 195);
+            this.flowLayoutPanel2.Location = new System.Drawing.Point(42, 195);
             this.flowLayoutPanel2.Margin = new System.Windows.Forms.Padding(0);
             this.flowLayoutPanel2.Name = "flowLayoutPanel2";
-            this.flowLayoutPanel2.Size = new System.Drawing.Size(332, 40);
+            this.flowLayoutPanel2.Size = new System.Drawing.Size(321, 40);
             this.flowLayoutPanel2.TabIndex = 5;
+            this.flowLayoutPanel2.WrapContents = false;
             // 
             // tableLayoutPanel4
             // 
@@ -405,13 +412,13 @@
             this.tableLayoutPanel4.ColumnCount = 3;
             this.tableLayoutPanel4.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Absolute, 155F));
             this.tableLayoutPanel4.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 100F));
-            this.tableLayoutPanel4.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Absolute, 38F));
+            this.tableLayoutPanel4.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Absolute, 85F));
             this.tableLayoutPanel4.Controls.Add(this.labelSoundAlias, 0, 0);
             this.tableLayoutPanel4.Controls.Add(this.labelIgnore, 0, 1);
             this.tableLayoutPanel4.Controls.Add(this.textBoxSoundAlias, 1, 0);
             this.tableLayoutPanel4.Controls.Add(this.textBoxIgnore, 1, 1);
             this.tableLayoutPanel4.Controls.Add(this.buttonIgnoreHelp, 2, 1);
-            this.tableLayoutPanel4.Controls.Add(this.buttonSoundHelp, 2, 0);
+            this.tableLayoutPanel4.Controls.Add(this.flowLayoutPanel1, 2, 0);
             this.tableLayoutPanel4.Location = new System.Drawing.Point(13, 235);
             this.tableLayoutPanel4.Margin = new System.Windows.Forms.Padding(5, 0, 5, 0);
             this.tableLayoutPanel4.Name = "tableLayoutPanel4";
@@ -467,6 +474,29 @@
             this.tableLayoutPanel5.Size = new System.Drawing.Size(386, 45);
             this.tableLayoutPanel5.TabIndex = 8;
             // 
+            // buttonSoundFileSelect
+            // 
+            this.buttonSoundFileSelect.Font = new System.Drawing.Font("Segoe MDL2 Assets", 8F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.buttonSoundFileSelect.Location = new System.Drawing.Point(33, 3);
+            this.buttonSoundFileSelect.Name = "buttonSoundFileSelect";
+            this.buttonSoundFileSelect.Size = new System.Drawing.Size(45, 32);
+            this.buttonSoundFileSelect.TabIndex = 7;
+            this.buttonSoundFileSelect.Text = "";
+            this.toolTip1.SetToolTip(this.buttonSoundFileSelect, "Select a sound file");
+            this.buttonSoundFileSelect.UseVisualStyleBackColor = true;
+            this.buttonSoundFileSelect.Click += new System.EventHandler(this.buttonSoundFileSelect_Click);
+            // 
+            // flowLayoutPanel1
+            // 
+            this.flowLayoutPanel1.Controls.Add(this.buttonSoundHelp);
+            this.flowLayoutPanel1.Controls.Add(this.buttonSoundFileSelect);
+            this.flowLayoutPanel1.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.flowLayoutPanel1.Location = new System.Drawing.Point(294, 0);
+            this.flowLayoutPanel1.Margin = new System.Windows.Forms.Padding(0);
+            this.flowLayoutPanel1.Name = "flowLayoutPanel1";
+            this.flowLayoutPanel1.Size = new System.Drawing.Size(85, 38);
+            this.flowLayoutPanel1.TabIndex = 15;
+            // 
             // MainForm
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(9F, 20F);
@@ -493,6 +523,7 @@
             this.tableLayoutPanel6.PerformLayout();
             this.tableLayoutPanel5.ResumeLayout(false);
             this.tableLayoutPanel5.PerformLayout();
+            this.flowLayoutPanel1.ResumeLayout(false);
             this.ResumeLayout(false);
 
         }
@@ -529,6 +560,9 @@
         private System.Windows.Forms.TableLayoutPanel tableLayoutPanel6;
         private System.Windows.Forms.Button buttonThresholdHelp;
         private System.Windows.Forms.TableLayoutPanel tableLayoutPanel5;
+        private System.Windows.Forms.Button buttonSoundFileSelect;
+        private System.Windows.Forms.FlowLayoutPanel flowLayoutPanel1;
+        private System.Windows.Forms.ToolTip toolTip1;
     }
 }
 
